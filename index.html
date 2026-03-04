@@ -1,1 +1,63 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лобби</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Игровое лобби">
+    <link rel="shortcut icon" href="t-games.svg" type="image/svg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #3e8e41;
+        }
+        .game-image {
+            width: 200px;
+            height: 150px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Игровой сайт</h1>
+        <p>Выберите игру:</p>
+        <div>
+            <a href="https://example.com/game1" class="button">
+                <img src="game1.jpg" alt="Игра 1" class="game-image">
+                <span>Игра 1</span>
+            </a>
+            <a href="https://example.com/game2" class="button">
+                <img src="game2.jpg" alt="Игра 2" class="game-image">
+                <span>Игра 2</span>
+            </a>
+            <a href="https://example.com/game3" class="button">
+                <img src="game3.jpg" alt="Игра 3" class="game-image">
+                <span>Игра 3</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
