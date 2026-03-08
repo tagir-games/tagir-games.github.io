@@ -7,23 +7,34 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
     }
     #canvas {
       border: 1px solid #ccc;
+      background-color: #ffffff;
     }
     #tools {
       margin-bottom: 10px;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #tools button {
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
   <div id="tools">
-    <button id="pencil-btn">Карандаш</button>
+    <button id="pencil-btn" class="btn">Карандаш</button>
     <input type="color" id="color-picker" value="#000000">
-    <button id="fill-btn">Заливка</button>
-    <button id="rectangle-btn">Прямоугольник</button>
-    <button id="circle-btn">Круг</button>
-    <button id="download-btn">Скачать</button>
+    <button id="fill-btn" class="btn">Заливка</button>
+    <button id="rectangle-btn" class="btn">Прямоугольник</button>
+    <button id="circle-btn" class="btn">Круг</button>
+    <button id="text-btn" class="btn">Текст</button>
+    <button id="download-btn" class="btn">Скачать</button>
   </div>
   <canvas id="canvas" width="800" height="600"></canvas>
 
@@ -35,12 +46,14 @@
     const fillBtn = document.getElementById('fill-btn');
     const rectangleBtn = document.getElementById('rectangle-btn');
     const circleBtn = document.getElementById('circle-btn');
+    const textBtn = document.getElementById('text-btn');
     const downloadBtn = document.getElementById('download-btn');
 
     let drawing = false;
     let lastX, lastY;
     let tool = 'pencil';
     let color = colorPicker.value;
+    let texts = [];
 
     pencilBtn.addEventListener('click', () => {
       tool = 'pencil';
@@ -56,6 +69,15 @@
 
     circleBtn.addEventListener('click', () => {
       tool = 'circle';
+    });
+
+    textBtn.addEventListener('click', () => {
+      tool = 'text';
+      const text = prompt('Введите текст:');
+      if (text) {
+        texts.push({ text, x: 10, y: 10 });
+        drawTexts();
+      }
     });
 
     downloadBtn.addEventListener('click', () => {
@@ -88,11 +110,13 @@
             break;
           case 'rectangle':
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTexts();
             ctx.fillStyle = color;
             ctx.fillRect(lastX, lastY, x - lastX, y - lastY);
             break;
           case 'circle':
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTexts();
             ctx.fillStyle = color;
             ctx.beginPath();
             ctx.arc(lastX, lastY, Math.max(Math.abs(x - lastX), Math.abs(y - lastY)), 0, 2 * Math.PI);
@@ -104,6 +128,9 @@
 
     canvas.addEventListener('mouseup', () => {
       drawing = false;
+      if (tool === 'rectangle' || tool === 'circle') {
+        drawTexts();
+      }
     });
 
     colorPicker.addEventListener('input', () => {
@@ -113,7 +140,16 @@
     fillBtn.addEventListener('click', () => {
       ctx.fillStyle = color;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      drawTexts();
     });
+
+    function drawTexts() {
+      ctx.font = '24px Arial';
+      ctx.fillStyle = '#000000';
+      for (const text of texts) {
+        ctx.fillText(text.text, text.x, text.y);
+      }
+    }
   </script>
 </body>
 </html>
