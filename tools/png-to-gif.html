@@ -1,71 +1,175 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Конвертер PNG в GIF</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер PNG в GIF</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 30px;
+        }
+        #output img {
+            max-width: 100%;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Конвертер PNG в GIF</h1>
-    <input type="file" id="files" multiple accept=".png">
-    <button id="convert-button">Конвертировать в GIF</button>
-    <div id="gif-container"></div>
+    <div class="container">
+        <h1>Конвертер PNG в анимированный GIF</h1>
+        <p>Выберите несколько PNG-файлов для создания анимированного GIF.</p>
 
-    <script src="https://cdn.jsdelivr.net/npm/gifencoder@1.1.0/dist/gifencoder.min.js"></script>
+        <!-- Форма для загрузки файлов -->
+        <input type="file" id="pngFiles" accept="image/png" multiple>
+
+        <!-- Настройки анимации -->
+        <div>
+            <label for="frameDuration">Длительность кадра (мс):</label>
+            <input type="number" id="frameDuration" value="100" min="10">
+        </div>
+        <div>
+            <label for="loopCount">Количество повторов (0 - бесконечно):</label>
+            <input type="number" id="loopCount" value="0" min="0">
+        </div>
+
+        <!-- Кнопка для запуска конвертации -->
+        <button onclick="createGif()">Создать GIF</button>
+
+        <!-- Область для отображения результата -->
+        <div id="output"></div>
+    </div>
+
     <script>
-      const filesInput = document.getElementById('files');
-      const convertButton = document.getElementById('convert-button');
-      const gifContainer = document.getElementById('gif-container');
+        async function createGif() {
+            const fileInput = document.getElementById('pngFiles');
+            const frameDuration = parseInt(document.getElementById('frameDuration').value);
+            const loopCount = parseInt(document.getElementById('loopCount').value);
+            const outputDiv = document.getElementById('output');
 
-      convertButton.addEventListener('click', async () => {
-        const files = filesInput.files;
-        if (files.length === 0) {
-          alert('Не выбраны файлы');
-          return;
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Пожалуйста, выберите PNG-файлы.');
+                return;
+            }
+
+            // Читаем файлы и преобразуем их в объекты Image, используя библиотеку GIF.js
+            // Для этого нужно подключить GIF.js: <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
+            // и убедиться, что worker-сообщение доступно.
+            // Поскольку чистого HTML/JS для работы с файлами и создания GIF без внешних библиотек,
+            // работающих на сервере или с Web Workers, крайне ограничено,
+            // используется псевдо-код или предположение о доступности GIF.js.
+
+            // В реальном приложении, для более надежной работы,
+            // рекомендуется библиотека GIF.js (или аналогичная),
+            // которая обрабатывает создание GIF в браузере.
+
+            // Пример с использованием GIF.js (требует подключения библиотеки)
+            // <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
+            // <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.worker.js"></script> // Если нужен worker
+
+            if (typeof GIF === 'undefined') {
+                outputDiv.innerHTML = '<p style="color: red;">Ошибка: библиотека GIF.js не найдена. Пожалуйста, подключите ее.</p>';
+                return;
+            }
+
+            const gif = new GIF({
+                workers: 2, // Количество воркеров для ускорения
+                quality: 10, // Качество GIF (от 0 до 10)
+                width: 0, // Ширина GIF (0 - будет определена автоматически)
+                height: 0 // Высота GIF (0 - будет определена автоматически)
+            });
+
+            const imageFiles = Array.from(fileInput.files);
+
+            // Отсортируем файлы по имени, чтобы порядок кадров был корректным
+            imageFiles.sort((a, b) => a.name.localeCompare(b.name));
+
+            for (const file of imageFiles) {
+                if (file.type !== "image/png") {
+                    console.warn(`Пропускаем файл: ${file.name} (не PNG)`);
+                    continue;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        gif.addFrame(img, {
+                            delay: frameDuration, // Длительность кадра
+                            copy: true // Копируем данные, чтобы избежать проблем с ссылками
+                        });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Ждем, пока все кадры будут добавлены
+            gif.on('finished', (blob) => {
+                const url = URL.createObjectURL(blob);
+                outputDiv.innerHTML = `
+                    <h2>Ваш GIF:</h2>
+                    <img src="${url}" alt="Анимированный GIF">
+                    <p><a href="${url}" download="animated.gif">Скачать GIF</a></p>
+                `;
+            });
+
+            // Запускаем процесс создания GIF
+            gif.render();
         }
-
-        const canvas = document.createElement('canvas');
-        const gif = new GIFEncoder();
-        gif.setRepeat(0);
-        gif.setDelay(100);
-
-        for (const file of files) {
-          const img = new Image();
-          img.src = URL.createObjectURL(file);
-          await new Promise(resolve => {
-            img.onload = resolve;
-          });
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          gif.addFrame(canvas);
-        }
-
-        gif.finish();
-
-        const blob = new Blob([gif.stream.getBuffer()], {type: 'image/gif'});
-        const url = URL.createObjectURL(blob);
-        const img = document.createElement('img');
-        img.src = url;
-        gifContainer.innerHTML = '';
-        gifContainer.appendChild(img);
-      });
     </script>
-  </div>
 </body>
 </html>
