@@ -25,64 +25,7 @@
     <button id="convert-button">Конвертировать в GIF</button>
     <div id="gif-container"></div>
 
-    <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
     <script>
-      class GifConverter {
-        constructor() {
-          this.frames = [];
-          this.gif = new GIF({
-            repeat: 0,
-            delay: 100,
-          });
-        }
-
-        addFrame(image) {
-          this.frames.push(image);
-        }
-
-        convertToGif() {
-          return new Promise((resolve, reject) => {
-            this.gif.on('finished', () => {
-              this.gif.getBuffer((err, buffer) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  const blob = new Blob([buffer], {type: 'image/gif'});
-                  resolve(blob);
-                }
-              });
-            });
-            this.frames.forEach((frame) => {
-              this.gif.addFrame(frame);
-            });
-            this.gif.render();
-          });
-        }
-      }
-
-      function readImage(file) {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => {
-            resolve(img);
-          };
-          img.onerror = () => {
-            reject(new Error('Ошибка загрузки изображения'));
-          };
-          img.src = URL.createObjectURL(file);
-        });
-      }
-
-      async function convertImagesToGif(files) {
-        const converter = new GifConverter();
-        for (const file of files) {
-          const image = await readImage(file);
-          converter.addFrame(image);
-        }
-        const gifBlob = await converter.convertToGif();
-        return gifBlob;
-      }
-
       const filesInput = document.getElementById('files');
       const convertButton = document.getElementById('convert-button');
       const gifContainer = document.getElementById('gif-container');
@@ -94,17 +37,57 @@
           return;
         }
 
-        try {
-          const gifBlob = await convertImagesToGif(files);
-          const gifUrl = URL.createObjectURL(gifBlob);
-          const gifImage = document.createElement('img');
-          gifImage.src = gifUrl;
-          gifContainer.innerHTML = '';
-          gifContainer.appendChild(gifImage);
-        } catch (error) {
-          alert('Ошибка конвертации: ' + error.message);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const gif = [];
+
+        for (const file of files) {
+          const img = new Image();
+          img.src = URL.createObjectURL(file);
+          await new Promise(resolve => {
+            img.onload = resolve;
+          });
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          gif.push(canvas.toDataURL());
         }
+
+        const gifBlob = await createGif(gif);
+        const gifUrl = URL.createObjectURL(gifBlob);
+        const gifImage = document.createElement('img');
+        gifImage.src = gifUrl;
+        gifContainer.innerHTML = '';
+        gifContainer.appendChild(gifImage);
       });
+
+      async function createGif(frames) {
+        const gifBlob = new Blob();
+        const gifEncoder = new GIFEncoder();
+        gifEncoder.setRepeat(0);
+        gifEncoder.setDelay(100);
+        for (const frame of frames) {
+          const img = await loadImage(frame);
+          gifEncoder.addFrame(img);
+        }
+        gifEncoder.finish();
+        const buffer = gifEncoder.stream.getBuffer();
+        return new Blob([buffer], {type: 'image/gif'});
+      }
+
+      async function loadImage(url) {
+        const img = new Image();
+        img.src = url;
+        await new Promise(resolve => {
+          img.onload = resolve;
+        });
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        return canvas;
+      }
     </script>
   </div>
 </body>
