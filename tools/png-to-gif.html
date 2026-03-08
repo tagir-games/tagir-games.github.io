@@ -25,6 +25,7 @@
     <button id="convert-button">Конвертировать в GIF</button>
     <div id="gif-container"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/gifencoder@1.1.0/dist/gifencoder.min.js"></script>
     <script>
       const filesInput = document.getElementById('files');
       const convertButton = document.getElementById('convert-button');
@@ -38,8 +39,9 @@
         }
 
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const gif = [];
+        const gif = new GIFEncoder();
+        gif.setRepeat(0);
+        gif.setDelay(100);
 
         for (const file of files) {
           const img = new Image();
@@ -49,45 +51,20 @@
           });
           canvas.width = img.width;
           canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0);
-          gif.push(canvas.toDataURL());
+          gif.addFrame(canvas);
         }
 
-        const gifBlob = await createGif(gif);
-        const gifUrl = URL.createObjectURL(gifBlob);
-        const gifImage = document.createElement('img');
-        gifImage.src = gifUrl;
-        gifContainer.innerHTML = '';
-        gifContainer.appendChild(gifImage);
-      });
+        gif.finish();
 
-      async function createGif(frames) {
-        const gifBlob = new Blob();
-        const gifEncoder = new GIFEncoder();
-        gifEncoder.setRepeat(0);
-        gifEncoder.setDelay(100);
-        for (const frame of frames) {
-          const img = await loadImage(frame);
-          gifEncoder.addFrame(img);
-        }
-        gifEncoder.finish();
-        const buffer = gifEncoder.stream.getBuffer();
-        return new Blob([buffer], {type: 'image/gif'});
-      }
-
-      async function loadImage(url) {
-        const img = new Image();
+        const blob = new Blob([gif.stream.getBuffer()], {type: 'image/gif'});
+        const url = URL.createObjectURL(blob);
+        const img = document.createElement('img');
         img.src = url;
-        await new Promise(resolve => {
-          img.onload = resolve;
-        });
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        return canvas;
-      }
+        gifContainer.innerHTML = '';
+        gifContainer.appendChild(img);
+      });
     </script>
   </div>
 </body>
