@@ -28,13 +28,22 @@
                 quality: 10,
             });
 
+            let loadedImages = 0;
+
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const img = new Image();
                     img.onload = function() {
-                        gif.addFrame(img, { delay: 200 });
-                        if (gif.frames.length === files.length) {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        
+                        gif.addFrame(canvas, { delay: 200 });
+                        loadedImages++;
+                        if (loadedImages === files.length) {
                             gif.render();
                         }
                     };
