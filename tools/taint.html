@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<link rel="shortcut icon" href="t-games.svg" type="image/svg">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Таинт</title>
+<title>Таинт-редактор</title>
 <style>
   body {
     margin: 0; 
@@ -21,41 +22,35 @@
   button.tool-btn {
     background: none;
     border: none;
-    padding: 8px;
     cursor: pointer;
+    padding: 8px;
     border-radius: 6px;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  button.tool-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: #3b82f6;
+    transition: fill 0.3s ease;
+  }
+  button.tool-btn span {
+    font-size: 10px;
+    color: #333;
+    margin-top: 2px;
+    user-select: none;
+  }
+  button.tool-btn:hover svg {
+    fill: #2563eb;
   }
   button.tool-btn.active {
     background: #1e40af;
     transform: scale(0.9);
   }
-  button.tool-btn img.tool-icon {
-    width: 28px;
-    height: 28px;
-    display: block;
-    filter: brightness(1);
-    transition: filter 0.3s ease;
-  }
-  button.tool-btn.active img.tool-icon {
-    filter: brightness(0) invert(1);
-  }
-  #img-upload-label {
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    padding: 8px;
-    border-radius: 6px;
-    border: 2px dashed #3b82f6;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-  }
-  #img-upload-label:hover {
-    background: #2563eb;
-  }
-  #img-upload-label:hover img.tool-icon {
-    filter: brightness(0) invert(1);
+  button.tool-btn.active svg {
+    fill: white;
   }
   #color-picker {
     width: 40px;
@@ -84,51 +79,98 @@
     touch-action: none;
     cursor: crosshair;
   }
+  #img-upload-label {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px dashed #3b82f6;
+    color: #3b82f6;
+    font-weight: bold;
+    user-select: none;
+    width: 40px;
+    height: 56px;
+  }
+  #img-upload-label:hover {
+    background: #2563eb;
+    color: white;
+  }
+  #img-upload-label svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+    margin-bottom: 2px;
+  }
+  #file-input {
+    display: none;
+  }
 </style>
 </head>
 <body>
 
 <div id="tools">
+  <!-- Иконки с подписями -->
   <button id="pencil-btn" class="tool-btn" title="Карандаш">
-    <img src="https://tagir-games.github.io/карандаш.png" alt="Карандаш" class="tool-icon" />
-  </button>
-  <button id="line-btn" class="tool-btn" title="Прямая линия">
-    <img src="https://tagir-games.github.io/линия.png" alt="Линия" class="tool-icon" />
-  </button>
-  <button id="triangle-btn" class="tool-btn" title="Треугольник">
-    <img src="https://tagir-games.github.io/треугольник.png" alt="Треугольник" class="tool-icon" />
-  </button>
-  <button id="star-btn" class="tool-btn" title="Звезда">
-    <img src="https://tagir-games.github.io/звезда.png" alt="Звезда" class="tool-icon" />
-  </button>
-  <button id="fill-btn" class="tool-btn" title="Заливка">
-    <img src="https://tagir-games.github.io/заливка.png" alt="Заливка" class="tool-icon" />
-  </button>
-  <button id="rectangle-btn" class="tool-btn" title="Прямоугольник">
-    <img src="https://tagir-games.github.io/прямоугольник.png" alt="Прямоугольник" class="tool-icon" />
-  </button>
-  <button id="circle-btn" class="tool-btn" title="Круг">
-    <img src="https://tagir-games.github.io/круг.png" alt="Круг" class="tool-icon" />
-  </button>
-  <button id="text-btn" class="tool-btn" title="Текст">
-    <img src="https://tagir-games.github.io/текст.png" alt="Текст" class="tool-icon" />
-  </button>
-  <button id="eraser-btn" class="tool-btn" title="Ластик">
-    <img src="https://tagir-games.github.io/ластик.png" alt="Ластик" class="tool-icon" />
+    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM22.7 7.04a1 1 0 0 0 0-1.41l-2.3-2.3a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.79-1.87z"/></svg>
+    <span>Карандаш</span>
   </button>
 
-  <label id="img-upload-label" title="Загрузить PNG" for="file-input">
-    <img src="https://tagir-games.github.io/загрузить.png" alt="Загрузить" class="tool-icon" />
+  <button id="line-btn" class="tool-btn" title="Прямая линия">
+    <svg viewBox="0 0 24 24"><path d="M3 21h18v-2H5.41l14.3-14.29-1.42-1.42L3 17.59V21z"/></svg>
+    <span>Линия</span>
+  </button>
+
+  <button id="triangle-btn" class="tool-btn" title="Треугольник">
+    <svg viewBox="0 0 24 24"><path d="M12 2L3 21h18L12 2z"/></svg>
+    <span>Треугольник</span>
+  </button>
+
+  <button id="star-btn" class="tool-btn" title="Звезда">
+    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>Звезда</span>
+  </button>
+
+  <button id="fill-btn" class="tool-btn" title="Заливка">
+    <svg viewBox="0 0 24 24"><path d="M19 10.5V19H5v-8.5H3v10h18v-10z"/><path d="M7 10.5l2-3 3-3 3 3 2 3z"/></svg>
+    <span>Заливка</span>
+  </button>
+
+  <button id="rectangle-btn" class="tool-btn" title="Прямоугольник">
+    <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="#3b82f6" stroke-width="2"/></svg>
+    <span>Прямоугольник</span>
+  </button>
+
+  <button id="circle-btn" class="tool-btn" title="Круг">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#3b82f6" stroke-width="2"/></svg>
+    <span>Круг</span>
+  </button>
+
+  <button id="text-btn" class="tool-btn" title="Текст">
+    <svg viewBox="0 0 24 24"><path d="M5 21h14v-2H5v2zm7-19l-5 7h3v7h4v-7h3l-5-7z"/></svg>
+    <span>Текст</span>
+  </button>
+
+  <button id="eraser-btn" class="tool-btn" title="Ластик">
+    <svg viewBox="0 0 24 24"><path d="M16.24 7.76L7.76 16.24 5 18l2.76-2.76 8.48-8.48z"/><path d="M18.36 5.64l-1.83-1.83-2.82 2.82 1.83 1.83z"/></svg>
+    <span>Ластик</span>
+  </button>
+
+  <label id="img-upload-label" title="Загрузить PNG">
+    <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm7-18l-5 5h3v6h4v-6h3l-5-5z"/></svg>
+    <input id="file-input" type="file" accept="image/png" />
+    <span>PNG</span>
   </label>
-  <input id="file-input" type="file" accept="image/png" style="display:none" />
 
   <input type="color" id="color-picker" value="#000000" title="Выбор цвета" />
 
   <label for="size-slider" id="size-label">5</label>
   <input type="range" id="size-slider" min="1" max="50" value="5" title="Толщина" />
-
+  
   <button id="download-btn" class="tool-btn" title="Скачать">
-    <img src="https://tagir-games.github.io/сохранить.png" alt="Скачать" class="tool-icon" />
+    <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm7-18l-5 5h3v6h4v-6h3l-5-5z"/></svg>
+    <span>Скачать</span>
   </button>
 </div>
 
@@ -138,58 +180,84 @@
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
 
-  const tools = ['pencil', 'line', 'triangle', 'star', 'fill', 'rectangle', 'circle', 'text', 'eraser'];
-  const buttons = tools.map(t => document.getElementById(t + '-btn'));
+  const pencilBtn = document.getElementById('pencil-btn');
+  const lineBtn = document.getElementById('line-btn');
+  const triangleBtn = document.getElementById('triangle-btn');
+  const starBtn = document.getElementById('star-btn');
+  const fillBtn = document.getElementById('fill-btn');
+  const rectangleBtn = document.getElementById('rectangle-btn');
+  const circleBtn = document.getElementById('circle-btn');
+  const textBtn = document.getElementById('text-btn');
+  const eraserBtn = document.getElementById('eraser-btn');
+  const downloadBtn = document.getElementById('download-btn');
   const colorPicker = document.getElementById('color-picker');
   const sizeSlider = document.getElementById('size-slider');
   const sizeLabel = document.getElementById('size-label');
   const fileInput = document.getElementById('file-input');
-  const downloadBtn = document.getElementById('download-btn');
+  const tools = document.getElementById('tools');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - tools.offsetHeight;
+    redrawAll();
+  }
+  window.addEventListener('resize', resizeCanvas);
 
   let tool = 'pencil';
   let drawing = false;
-  let startX = 0, startY = 0;
-  let currentX = 0, currentY = 0;
+  let startX=0, startY=0;
+  let currentX=0, currentY=0;
   let size = +sizeSlider.value;
   let color = colorPicker.value;
   let currentLine = [];
 
+  // Массив фигур и загруженных изображений {img, x, y}
   const shapes = [];
   const imagesOnCanvas = [];
 
+  const buttons = [
+    pencilBtn, lineBtn, triangleBtn, starBtn, fillBtn,
+    rectangleBtn, circleBtn, textBtn, eraserBtn
+  ];
+
   function setTool(t) {
     tool = t;
-    buttons.forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById(tool + '-btn');
-    if(activeBtn) activeBtn.classList.add('active');
-    if(tool === 'eraser') {
-      canvas.style.cursor = 'crosshair';
-    } else {
-      canvas.style.cursor = 'crosshair';
+    updateActiveButton();
+    canvas.style.cursor = (t === 'eraser') ? 'crosshair' : 'crosshair';
+  }
+
+  function updateActiveButton() {
+    buttons.forEach(b => b.classList.remove('active'));
+    switch(tool) {
+      case 'pencil': pencilBtn.classList.add('active'); break;
+      case 'line': lineBtn.classList.add('active'); break;
+      case 'triangle': triangleBtn.classList.add('active'); break;
+      case 'star': starBtn.classList.add('active'); break;
+      case 'fill': fillBtn.classList.add('active'); break;
+      case 'rectangle': rectangleBtn.classList.add('active'); break;
+      case 'circle': circleBtn.classList.add('active'); break;
+      case 'text': textBtn.classList.add('active'); break;
+      case 'eraser': eraserBtn.classList.add('active'); break;
     }
   }
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setTool(btn.id.replace('-btn', ''));
-    });
-  });
+  pencilBtn.onclick = () => setTool('pencil');
+  lineBtn.onclick = () => setTool('line');
+  triangleBtn.onclick = () => setTool('triangle');
+  starBtn.onclick = () => setTool('star');
+  fillBtn.onclick = () => setTool('fill');
+  rectangleBtn.onclick = () => setTool('rectangle');
+  circleBtn.onclick = () => setTool('circle');
+  textBtn.onclick = () => setTool('text');
+  eraserBtn.onclick = () => setTool('eraser');
 
   colorPicker.oninput = e => {
     color = e.target.value;
   };
-
   sizeSlider.oninput = e => {
     size = +e.target.value;
     sizeLabel.textContent = size;
   };
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - document.getElementById('tools').offsetHeight;
-    redrawAll();
-  }
-  window.addEventListener('resize', resizeCanvas);
 
   canvas.onmousedown = e => {
     const rect = canvas.getBoundingClientRect();
@@ -208,17 +276,23 @@
         shapes.push({type: 'text', text, x: startX, y: startY, color});
         redrawAll();
       }
-      return;
+      return; // нет drawing для текста
     }
 
-    if(tool === 'pencil' || tool === 'eraser') {
-      currentLine = [{x: startX, y: startY}];
+    if(tool === 'eraser' || tool === 'pencil') {
       drawing = true;
+      currentLine = [{x: startX, y: startY}];
       return;
     }
 
     if(['line','rectangle','circle','triangle','star'].includes(tool)) {
       drawing = true;
+      return;
+    }
+
+    if(tool === 'image_upload_selected') {
+      // Нет такого инструмента, загружаем изображение пока - не здесь
+      return;
     }
   };
 
@@ -250,15 +324,15 @@
       ctx.stroke();
     } else if(['rectangle','circle','triangle','star','line'].includes(tool)) {
       redrawAll();
-      ctx.lineWidth = size;
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
+      ctx.lineWidth = size;
       ctx.globalAlpha = 0.5;
 
       const w = currentX - startX;
       const h = currentY - startY;
 
-      switch(tool){
+      switch(tool) {
         case 'rectangle':
           ctx.fillRect(startX, startY, w, h);
           break;
@@ -302,7 +376,7 @@
     if(tool === 'pencil' || tool === 'eraser') {
       if(currentLine.length > 1) {
         shapes.push({
-          type: tool,
+          type: tool, 
           points: currentLine.slice(),
           color: tool === 'eraser' ? '#fff' : color,
           size
@@ -312,16 +386,17 @@
     } else if(['rectangle','circle','triangle','star','line'].includes(tool)) {
       const w = endX - startX;
       const h = endY - startY;
-      switch(tool){
+
+      switch(tool) {
         case 'rectangle':
           shapes.push({type:'rect', x:startX, y:startY, width:w, height:h, color});
           break;
         case 'circle':
-          const rad = Math.hypot(w, h);
-          shapes.push({type:'circle', x:startX, y:startY, radius: rad, color});
+          const radius = Math.hypot(w,h);
+          shapes.push({type:'circle', x:startX, y:startY, radius, color});
           break;
         case 'triangle':
-          shapes.push({type:'triangle', x:startX, y:startY, width: w, height: h, color});
+          shapes.push({type:'triangle', x:startX, y:startY, width:w, height:h, color});
           break;
         case 'star':
           const sizeStar = Math.min(Math.abs(w), Math.abs(h))/2;
@@ -335,19 +410,42 @@
     }
   };
 
+  // Загрузка PNG изображения
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/png')) {
+      alert('Пожалуйста, выберите PNG изображение.');
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      // Ждём, пока загружено, добавляем объект
+      // Добавим в imagesOnCanvas, позицию будет 10,10 (можно доработать - поставить в центр)
+      imagesOnCanvas.push({img, x: 10, y: 10, width: img.width, height: img.height});
+      redrawAll();
+      fileInput.value = ''; // сбросить input
+    };
+    img.onerror = () => alert('Ошибка загрузки изображения.');
+    img.src = URL.createObjectURL(file);
+  });
+
   function drawStar(ctx, cx, cy, outerRadius, spikes) {
     const innerRadius = outerRadius / 2.5;
     let rot = Math.PI / 2 * 3;
+    let x = cx;
+    let y = cy;
     const step = Math.PI / spikes;
     ctx.beginPath();
     ctx.moveTo(cx, cy - outerRadius);
-    for(let i=0; i < spikes; i++){
-      let x = cx + Math.cos(rot)*outerRadius;
-      let y = cy + Math.sin(rot)*outerRadius;
+    for(let i=0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
       ctx.lineTo(x, y);
       rot += step;
-      x = cx + Math.cos(rot)*innerRadius;
-      y = cy + Math.sin(rot)*innerRadius;
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
       ctx.lineTo(x, y);
       rot += step;
     }
@@ -356,7 +454,7 @@
   }
 
   function redrawAll() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const fillShape = [...shapes].reverse().find(s=>s.type==='fill');
     if(fillShape){
@@ -364,8 +462,9 @@
       ctx.fillRect(0,0,canvas.width,canvas.height);
     }
 
-    imagesOnCanvas.forEach(({img, x, y, width, height})=>{
-      ctx.drawImage(img, x, y, width, height);
+    // Рисуем загруженные изображения
+    imagesOnCanvas.forEach(({img,x,y,width,height})=>{
+      ctx.drawImage(img,x,y,width,height);
     });
 
     for(let s of shapes){
@@ -375,9 +474,9 @@
           ctx.lineWidth = s.size || 2;
           ctx.lineCap = 'round';
           ctx.beginPath();
-          for(let i=0; i < s.points.length-1; i++){
-            ctx.moveTo(s.points[i].x, s.points[i].y);
-            ctx.lineTo(s.points[i+1].x, s.points[i+1].y);
+          for(let i=0; i<s.points.length-1; i++){
+            ctx.moveTo(s.points[i].x,s.points[i].y);
+            ctx.lineTo(s.points[i+1].x,s.points[i+1].y);
           }
           ctx.stroke();
           break;
@@ -386,9 +485,9 @@
           ctx.lineWidth = s.size || 10;
           ctx.lineCap = 'round';
           ctx.beginPath();
-          for(let i=0; i < s.points.length-1; i++){
-            ctx.moveTo(s.points[i].x, s.points[i].y);
-            ctx.lineTo(s.points[i+1].x, s.points[i+1].y);
+          for(let i=0; i<s.points.length-1; i++){
+            ctx.moveTo(s.points[i].x,s.points[i].y);
+            ctx.lineTo(s.points[i+1].x,s.points[i+1].y);
           }
           ctx.stroke();
           break;
@@ -396,32 +495,32 @@
           ctx.strokeStyle = s.color;
           ctx.lineWidth = s.size || 2;
           ctx.beginPath();
-          ctx.moveTo(s.x1, s.y1);
-          ctx.lineTo(s.x2, s.y2);
+          ctx.moveTo(s.x1,s.y1);
+          ctx.lineTo(s.x2,s.y2);
           ctx.stroke();
           break;
         case 'rect':
           ctx.fillStyle = s.color;
-          ctx.fillRect(s.x, s.y, s.width, s.height);
+          ctx.fillRect(s.x,s.y,s.width,s.height);
           break;
         case 'circle':
           ctx.fillStyle = s.color;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.radius, 0, 2*Math.PI);
+          ctx.arc(s.x,s.y,s.radius,0,2*Math.PI);
           ctx.fill();
           break;
         case 'triangle':
           ctx.fillStyle = s.color;
           ctx.beginPath();
-          ctx.moveTo(s.x, s.y);
-          ctx.lineTo(s.x + s.width, s.y + s.height);
-          ctx.lineTo(s.x - s.width, s.y + s.height);
+          ctx.moveTo(s.x,s.y);
+          ctx.lineTo(s.x + s.width,s.y + s.height);
+          ctx.lineTo(s.x - s.width,s.y + s.height);
           ctx.closePath();
           ctx.fill();
           break;
         case 'star':
           ctx.fillStyle = s.color;
-          drawStar(ctx, s.x, s.y, s.size, s.spikes);
+          drawStar(ctx,s.x,s.y,s.size,s.spikes);
           ctx.fill();
           break;
         case 'text':
@@ -430,28 +529,11 @@
           ctx.fillText(s.text, s.x, s.y);
           break;
         case 'fill':
-          // фон уже залит выше
+          // Уже залито выше
           break;
       }
     }
   }
-
-  fileInput.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if(!file) return;
-    if(!file.type.startsWith('image/png')) {
-      alert('Пожалуйста, выберите PNG изображение.');
-      return;
-    }
-    const img = new Image();
-    img.onload = () => {
-      imagesOnCanvas.push({img, x: 10, y: 10, width: img.width, height: img.height});
-      redrawAll();
-      fileInput.value = '';
-    };
-    img.onerror = ()=> alert('Ошибка загрузки изображения.');
-    img.src = URL.createObjectURL(file);
-  });
 
   downloadBtn.onclick = () => {
     const dataURL = canvas.toDataURL('image/png');
@@ -465,6 +547,7 @@
   resizeCanvas();
   setTool('pencil');
   sizeLabel.textContent = size;
+
 </script>
 
 </body>
