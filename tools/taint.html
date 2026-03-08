@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<link rel="shortcut icon" href="t-games.svg" type="image/svg">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Таинт-редактор</title>
+<title>Растровый редактор с регулировкой толщины и загрузкой PNG</title>
 <style>
   body {
     margin: 0; 
@@ -113,52 +112,52 @@
 <div id="tools">
   <!-- Иконки с подписями -->
   <button id="pencil-btn" class="tool-btn" title="Карандаш">
-    <img src="https://tagir-games.github.io/карандаш.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/карандаш.png" width="40" height="40" alt="Кнопка">
     <span>Карандаш</span>
   </button>
 
   <button id="line-btn" class="tool-btn" title="Прямая линия">
-    <img src="https://tagir-games.github.io/линия.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/линия.png" width="40" height="40" alt="Кнопка">
     <span>Линия</span>
   </button>
 
   <button id="triangle-btn" class="tool-btn" title="Треугольник">
-    <img src="https://tagir-games.github.io/треугольник.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/треугольник.png" width="40" height="40" alt="Кнопка">
     <span>Треугольник</span>
   </button>
 
   <button id="star-btn" class="tool-btn" title="Звезда">
-    <img src="https://tagir-games.github.io/звезда.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/звезда.png" width="40" height="40" alt="Кнопка">
     <span>Звезда</span>
   </button>
 
-  <button id="fill-btn" class="tool-btn" title="Заливка">
-    <img src="https://tagir-games.github.io/заливка.png" alt="Кнопка">
-    <span>Заливка</span>
-  </button>
-
   <button id="rectangle-btn" class="tool-btn" title="Прямоугольник">
-    <img src="https://tagir-games.github.io/прямоугольник.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/прямоугольник.png" width="40" height="40" alt="Кнопка">
     <span>Прямоугольник</span>
   </button>
-
+ 
   <button id="circle-btn" class="tool-btn" title="Круг">
-    <img src="https://tagir-games.github.io/круг.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/круг.png" width="40" height="40" alt="Кнопка">
     <span>Круг</span>
   </button>
 
+  <button id="fill-btn" class="tool-btn" title="Заливка">
+    <img src="https://tagir-games.github.io/заливка.png" width="40" height="40" alt="Кнопка">
+    <span>Заливка</span>
+  </button>
+
   <button id="text-btn" class="tool-btn" title="Текст">
-    <img src="https://tagir-games.github.io/текст.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/текст.png" width="40" height="40" alt="Кнопка">
     <span>Текст</span>
   </button>
 
   <button id="eraser-btn" class="tool-btn" title="Ластик">
-    <img src="https://tagir-games.github.io/ластик.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/ластик.png" width="40" height="40" alt="Кнопка">
     <span>Ластик</span>
   </button>
 
   <label id="img-upload-label" title="Загрузить PNG">
-    <img src="https://tagir-games.github.io/загрузить.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/загрузить.png" width="40" height="40" alt="Кнопка">
     <input id="file-input" type="file" accept="image/png" />
     <span>PNG</span>
   </label>
@@ -169,7 +168,7 @@
   <input type="range" id="size-slider" min="1" max="50" value="5" title="Толщина" />
   
   <button id="download-btn" class="tool-btn" title="Скачать">
-    <img src="https://tagir-games.github.io/сохранить.png" alt="Кнопка">
+    <img src="https://tagir-games.github.io/сохранить.png" width="40" height="40" alt="Кнопка">
     <span>Скачать</span>
   </button>
 </div>
