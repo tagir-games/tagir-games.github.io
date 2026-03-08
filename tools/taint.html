@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Растровый редактор</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #canvas {
+      border: 1px solid #ccc;
+    }
+    #tools {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="tools">
+    <button id="pencil-btn">Карандаш</button>
+    <input type="color" id="color-picker" value="#000000">
+    <button id="fill-btn">Заливка</button>
+    <button id="rectangle-btn">Прямоугольник</button>
+    <button id="circle-btn">Круг</button>
+    <button id="download-btn">Скачать</button>
+  </div>
+  <canvas id="canvas" width="800" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const pencilBtn = document.getElementById('pencil-btn');
+    const colorPicker = document.getElementById('color-picker');
+    const fillBtn = document.getElementById('fill-btn');
+    const rectangleBtn = document.getElementById('rectangle-btn');
+    const circleBtn = document.getElementById('circle-btn');
+    const downloadBtn = document.getElementById('download-btn');
+
+    let drawing = false;
+    let lastX, lastY;
+    let tool = 'pencil';
+    let color = colorPicker.value;
+
+    pencilBtn.addEventListener('click', () => {
+      tool = 'pencil';
+    });
+
+    fillBtn.addEventListener('click', () => {
+      tool = 'fill';
+    });
+
+    rectangleBtn.addEventListener('click', () => {
+      tool = 'rectangle';
+    });
+
+    circleBtn.addEventListener('click', () => {
+      tool = 'circle';
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const dataURL = canvas.toDataURL();
+      const a = document.createElement('a');
+      a.href = dataURL;
+      a.download = 'art.png';
+      a.click();
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      drawing = true;
+      lastX = e.offsetX;
+      lastY = e.offsetY;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (drawing) {
+        const x = e.offsetX;
+        const y = e.offsetY;
+        switch (tool) {
+          case 'pencil':
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            lastX = x;
+            lastY = y;
+            break;
+          case 'rectangle':
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = color;
+            ctx.fillRect(lastX, lastY, x - lastX, y - lastY);
+            break;
+          case 'circle':
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(lastX, lastY, Math.max(Math.abs(x - lastX), Math.abs(y - lastY)), 0, 2 * Math.PI);
+            ctx.fill();
+            break;
+        }
+      }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+    });
+
+    colorPicker.addEventListener('input', () => {
+      color = colorPicker.value;
+    });
+
+    fillBtn.addEventListener('click', () => {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+  </script>
+</body>
+</html>
