@@ -3,173 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конвертер PNG в GIF</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
-            margin: 0;
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        input[type="number"] {
-            width: 80px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-left: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #output {
-            margin-top: 30px;
-        }
-        #output img {
-            max-width: 100%;
-            border: 1px solid #eee;
-            border-radius: 4px;
-        }
-    </style>
+    <title>PNG в GIF Конвертер</title>
+    <script src="https://cdn.rawgit.com/jnordberg/gif.js/master/dist/gif.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Конвертер PNG в анимированный GIF</h1>
-        <p>Выберите несколько PNG-файлов для создания анимированного GIF.</p>
-
-        <!-- Форма для загрузки файлов -->
-        <input type="file" id="pngFiles" accept="image/png" multiple>
-
-        <!-- Настройки анимации -->
-        <div>
-            <label for="frameDuration">Длительность кадра (мс):</label>
-            <input type="number" id="frameDuration" value="100" min="10">
-        </div>
-        <div>
-            <label for="loopCount">Количество повторов (0 - бесконечно):</label>
-            <input type="number" id="loopCount" value="0" min="0">
-        </div>
-
-        <!-- Кнопка для запуска конвертации -->
-        <button onclick="createGif()">Создать GIF</button>
-
-        <!-- Область для отображения результата -->
-        <div id="output"></div>
-    </div>
-
+    <h1>Конвертер PNG в GIF</h1>
+    <input type="file" id="fileInput" multiple accept="image/png">
+    <button id="convertBtn">Конвертировать в GIF</button>
+    <br>
+    <img id="gifOutput" alt="GIF результат" />
+    
     <script>
-        async function createGif() {
-            const fileInput = document.getElementById('pngFiles');
-            const frameDuration = parseInt(document.getElementById('frameDuration').value);
-            const loopCount = parseInt(document.getElementById('loopCount').value);
-            const outputDiv = document.getElementById('output');
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            const input = document.getElementById('fileInput');
+            const files = input.files;
 
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert('Пожалуйста, выберите PNG-файлы.');
-                return;
-            }
-
-            // Читаем файлы и преобразуем их в объекты Image, используя библиотеку GIF.js
-            // Для этого нужно подключить GIF.js: <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
-            // и убедиться, что worker-сообщение доступно.
-            // Поскольку чистого HTML/JS для работы с файлами и создания GIF без внешних библиотек,
-            // работающих на сервере или с Web Workers, крайне ограничено,
-            // используется псевдо-код или предположение о доступности GIF.js.
-
-            // В реальном приложении, для более надежной работы,
-            // рекомендуется библиотека GIF.js (или аналогичная),
-            // которая обрабатывает создание GIF в браузере.
-
-            // Пример с использованием GIF.js (требует подключения библиотеки)
-            // <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
-            // <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.worker.js"></script> // Если нужен worker
-
-            if (typeof GIF === 'undefined') {
-                outputDiv.innerHTML = '<p style="color: red;">Ошибка: библиотека GIF.js не найдена. Пожалуйста, подключите ее.</p>';
+            if (files.length === 0) {
+                alert('Пожалуйста, выберите хотя бы одно изображение PNG.');
                 return;
             }
 
             const gif = new GIF({
-                workers: 2, // Количество воркеров для ускорения
-                quality: 10, // Качество GIF (от 0 до 10)
-                width: 0, // Ширина GIF (0 - будет определена автоматически)
-                height: 0 // Высота GIF (0 - будет определена автоматически)
+                workers: 2,
+                quality: 10,
             });
 
-            const imageFiles = Array.from(fileInput.files);
-
-            // Отсортируем файлы по имени, чтобы порядок кадров был корректным
-            imageFiles.sort((a, b) => a.name.localeCompare(b.name));
-
-            for (const file of imageFiles) {
-                if (file.type !== "image/png") {
-                    console.warn(`Пропускаем файл: ${file.name} (не PNG)`);
-                    continue;
-                }
+            Array.from(files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = function(event) {
                     const img = new Image();
-                    img.onload = () => {
-                        gif.addFrame(img, {
-                            delay: frameDuration, // Длительность кадра
-                            copy: true // Копируем данные, чтобы избежать проблем с ссылками
-                        });
+                    img.onload = function() {
+                        gif.addFrame(img, { delay: 200 });
+                        if (gif.frames.length === files.length) {
+                            gif.render();
+                        }
                     };
-                    img.src = e.target.result;
+                    img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
-            }
-
-            // Ждем, пока все кадры будут добавлены
-            gif.on('finished', (blob) => {
-                const url = URL.createObjectURL(blob);
-                outputDiv.innerHTML = `
-                    <h2>Ваш GIF:</h2>
-                    <img src="${url}" alt="Анимированный GIF">
-                    <p><a href="${url}" download="animated.gif">Скачать GIF</a></p>
-                `;
             });
 
-            // Запускаем процесс создания GIF
-            gif.render();
-        }
+            gif.on('finished', function(blob) {
+                const gifOutput = document.getElementById('gifOutput');
+                gifOutput.src = URL.createObjectURL(blob);
+            });
+        });
     </script>
 </body>
 </html>
