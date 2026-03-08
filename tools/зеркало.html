@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зеркало</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .mirror-container {
+            position: relative;
+            width: 400px; /* Ширина зеркала */
+            height: 600px; /* Высота зеркала */
+            background-color: #ffffff; /* Цвет рамы */
+            border: 10px solid #cccccc; /* Рама зеркала */
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            overflow: hidden; /* Скрываем всё, что выходит за пределы */
+        }
+        .mirror-surface {
+            position: absolute;
+            top: 50%; /* Центрируем по вертикали */
+            left: 50%; /* Центрируем по горизонтали */
+            width: 95%; /* Почти вся ширина контейнера */
+            height: 95%; /* Почти вся высота контейнера */
+            background-image: url('placeholder.jpg'); /* Замените на ваше изображение или оставьте для имитации */
+            background-size: cover; /* Масштабируем изображение, чтобы оно покрывало поверхность */
+            background-position: center; /* Центрируем изображение */
+            transform: translate(-50%, -50%) scale(-1, 1); /* Отражение по горизонтали */
+            /* Для имитации отражения веб-камеры, вам понадобится JavaScript */
+        }
+    </style>
+</head>
+<body>
+    <div class="mirror-container">
+        <div class="mirror-surface">
+            <!-- Сюда может быть выведено изображение с Веб-камеры с помощью JS -->
+        </div>
+    </div>
+</body>
+</html>
