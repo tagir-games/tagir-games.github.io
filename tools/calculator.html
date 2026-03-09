@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продвинутый Калькулятор</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 20px;
+        }
+        .display {
+            background-color: #e0e0e0;
+            color: #333;
+            font-size: 2.5em;
+            text-align: right;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            overflow-x: auto; /* Горизонтальная прокрутка, если текст слишком длинный */
+            white-space: nowrap;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 колонки для стандартных кнопок */
+            gap: 10px;
+        }
+        .buttons button {
+            background-color: #f9f9f9;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .buttons button:hover {
+            background-color: #e0e0e0;
+        }
+        .buttons button:active {
+            background-color: #d0d0d0;
+        }
+        /* Особые кнопки */
+        .buttons .operator { background-color: #f9a03f; color: white; }
+        .buttons .operator:hover { background-color: #e48f32; }
+        .buttons .equals { background-color: #4caf50; color: white; font-size: 1.8em; }
+        .buttons .equals:hover { background-color: #45a049; }
+        .buttons .clear { background-color: #e53935; color: white; }
+        .buttons .clear:hover { background-color: #d32f2f; }
+        .buttons .mode-button { background-color: #2196f3; color: white; } /* Кнопки для смены режимов */
+        .buttons .mode-button:hover { background-color: #1976d2; }
+
+        /* Стили для скрытия/отображения дополнительных кнопок */
+        .engineering-buttons, .programmer-buttons, .statistical-buttons, .equation-buttons, .conversion-buttons, .special-functions-buttons {
+            display: none; /* По умолчанию скрыты */
+            margin-top: 10px;
+            grid-template-columns: repeat(4, 1fr); /* Для дополнительных кнопок тоже 4 колонки */
+            gap: 10px;
+        }
+
+        /* Стили для элементов управления режимами */
+        .mode-switcher {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .mode-switcher select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+
+        <!-- Переключение режимов -->
+        <div class="mode-switcher">
+            <label for="calc-mode">Режим:</label>
+            <select id="calc-mode" onchange="switchMode(this.value)">
+                <option value="standard" selected>Стандартный</option>
+                <option value="engineering">Инженерный</option>
+                <option value="programmer">Программист</option>
+                <option value="statistical">Статистический</option>
+                <option value="equations">Уравнения</option>
+                <option value="tables">Таблицы</option>
+                <option value="currency">Конвертация валют</option>
+                <option value="special">Спец. функции (НДС, Маржа)</option>
+            </select>
+        </div>
+
+        <div class="buttons" id="standard-buttons">
+            <!-- Стандартные кнопки -->
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="operator" onclick="appendToDisplay('+/-')">+/-</button>
+            <button class="operator" onclick="appendToDisplay('%')">%</button>
+            <button class="operator" onclick="performOperation('/')">/</button>
+
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="performOperation('*')">*</button>
+
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="performOperation('-')">-</button>
+
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="performOperation('+')">+</button>
+
+            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+            <button onclick="appendToDisplay('.')">,</button>
+            <button class="equals" onclick="calculateResult()">=</button>
+        </div>
+
+        <!-- Кнопки для Инженерного режима -->
+        <div class="engineering-buttons" id="engineering-buttons">
+            <button onclick="appendToDisplay('(')">(</button>
+            <button onclick="appendToDisplay(')')">)</button>
+            <button onclick="appendToDisplay('sq')">x²</button>
+            <button onclick="appendToDisplay('sqrt')">√</button>
+            <button class="operator" onclick="appendToDisplay('^')">xʸ</button>
+            <button onclick="appendToDisplay('log')">log</button>
+            <button onclick="appendToDisplay('ln')">ln</button>
+            <button onclick="appendToDisplay('sin')">sin</button>
+            <button onclick="appendToDisplay('cos')">cos</button>
+            <button onclick="appendToDisplay('tan')">tan</button>
+            <button onclick="appendToDisplay('PI')">π</button>
+            <button onclick="appendToDisplay('e')">e</button>
+        </div>
+
+        <!-- Кнопки для Программистского режима -->
+        <div class="programmer-buttons" id="programmer-buttons">
+            <button onclick="changeBase('bin')">BIN</button>
+            <button onclick="changeBase('oct')">OCT</button>
+            <button onclick="changeBase('dec')">DEC</button>
+            <button onclick="changeBase('hex')">HEX</button>
+            <button onclick="appendToDisplay('A')">A</button>
+            <button onclick="appendToDisplay('B')">B</button>
+            <button onclick="appendToDisplay('C')">C</button>
+            <button onclick="appendToDisplay('D')">D</button>
+            <button onclick="appendToDisplay('E')">E</button>
+            <button onclick="appendToDisplay('F')">F</button>
+            <button class="operator" onclick="performOperation('&')">&</button>
+            <button class="operator" onclick="performOperation('|')">|</button>
+        </div>
+
+        <!-- Кнопки для Статистического режима -->
+        <div class="statistical-buttons" id="statistical-buttons">
+            <button onclick="addValueForStats()">Add</button>
+            <button onclick="calculateStats('mean')">Sum</button>
+            <button onclick="calculateStats('average')">Avg</button>
+            <button onclick="calculateStats('variance')">Var</button>
+             <button onclick="calculateStats('stdev')">StdDev</button>
+        </div>
+
+        <!-- Кнопки для Режима Уравнений (Заполнители) -->
+        <div class="equation-buttons" id="equation-buttons">
+            <p>Режим уравнений (для реализации требуется JS)</p>
+        </div>
+
+        <!-- Кнопки для Конвертации валют (Заполнители) -->
+        <div class="conversion-buttons" id="conversion-buttons">
+            <p>Конвертация валют (для реализации требуется JS)</p>
+        </div>
+
+        <!-- Кнопки для Специализированных функций (Заполнители) -->
+        <div class="special-functions-buttons" id="special-functions-buttons">
+            <p>Спец. функции (для реализации требуется JS)</p>
+        </div>
+    </div>
+
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = ''; // Текущий ввод пользователя
+        let firstOperand = ''; // Первый операнд для операций
+        let operator = ''; // Выбранный оператор
+        let currentMode = 'standard'; // Текущий режим калькулятора
+        let base = 10; // Текущая система счисления (для программистского режима)
+        let statsArray = []; // Массив для статистических данных
+        let equationInput = ''; // Для режима уравнений
+
+        // Функция для обновления отображения
+        function updateDisplay() {
+            display.textContent = currentInput || (firstOperand ? firstOperand : '0');
+        }
+
+        // Добавление символа к текущему вводу
+        function appendToDisplay(value) {
+            if (currentMode === 'programmer') {
+                // В программистском режиме, разрешаем только допустимые символы для текущей базы
+                const validChars = {
+                    10: '0123456789',
+                    16: '0123456789ABCDEF',
+                    8: '01234567',
+                    2: '01'
+                };
+                if (!validChars[base].includes(value.toUpperCase())) return;
+            }
+
+            currentInput += value;
+            updateDisplay();
+        }
+
+        // Сброс калькулятора
+        function clearDisplay() {
+            display.textContent = '0';
+            currentInput = '';
+            firstOperand = '';
+            operator = '';
+            statsArray = [];
+            equationInput = '';
+        }
+
+        // Очистка только текущего ввода
+        function clearEntry() {
+            currentInput = '';
+            updateDisplay();
+        }
+
+        // Выбор оператора
+        function performOperation(op) {
+            if (currentInput === '') {
+                operator = op; // Если оператор нажимается первым, устанавливаем его
+                updateDisplay();
+                return;
+            }
+
+            if (firstOperand === '') {
+                firstOperand = currentInput;
+            } else if (currentInput !== '') {
+                // Если есть и первый операнд, и текущий ввод, выполняем предыдущую операцию
+                calculateResult();
+            }
+            operator = op;
+            currentInput = '';
+            updateDisplay();
+        }
+
+        // Вычисление результата
+        function calculateResult() {
+            if (operator === '' || currentInput === '' || firstOperand === '') {
+                // Недостаточно данных для вычисления
+                return;
+            }
+
+            let result;
+            const num1 = parseFloat(convertFromBase(firstOperand, base));
+            const num2 = parseFloat(convertFromBase(currentInput, base));
+
+            switch (operator) {
+                case '+': result = num1 + num2; break;
+                case '-': result = num1 - num2; break;
+                case '*': result = num1 * num2; break;
+                case '/':
+                    if (num2 === 0) {
+                        result = 'Error';
+                    } else {
+                        result = num1 / num2;
+                    }
+                    break;
+                case '^': result = Math.pow(num1, num2); break; // Инженерный режим
+                case '&': result = num1 & num2; break; // Программистский режим
+                case '|': result = num1 | num2; break; // Программистский режим
+                default: return; // Если оператор неизвестен
+            }
+
+            if (currentMode === 'programmer') {
+                firstOperand = convertToBase(result.toString(), base);
+            } else if (currentMode === 'engineering' && operator === 'sq') { // Для x^2
+                 results = num1 * num1;
+            } else if (currentMode === 'engineering' && operator === 'sqrt') { // Для √
+                 results = Math.sqrt(num1);
+            } else if (currentMode === 'engineering' && operator === 'log') { // Для log
+                 results = Math.log10(num1);
+            } else if (currentMode === 'engineering' && operator === 'ln') { // Для ln
+                 results = Math.log(num1);
+            } else if (currentMode === 'engineering' && operator === 'sin') { // Для sin
+                 results = Math.sin(num1 * Math.PI / 180); // Предполагаем градусы
+            } else if (currentMode === 'engineering' && operator === 'cos') { // Для cos
+                 results = Math.cos(num1 * Math.PI / 180); // Предполагаем градусы
+            } else if (currentMode === 'engineering' && operator === 'tan') { // Для tan
+                 results = Math.tan(num1 * Math.PI / 180); // Предполагаем градусы
+            } else {
+                firstOperand = result.toString();
+            }
+
+            currentInput = ''; // Очищаем текущий ввод после вычисления
+            operator = ''; // Сбрасываем оператор
+            updateDisplay();
+        }
+
+        // Функция смены режимов
+        function switchMode(mode) {
+            currentMode = mode;
+            // Скрываем все дополнительные кнопки
+            document.querySelectorAll('.engineering-buttons, .programmer-buttons, .statistical-buttons, .equation-buttons, .conversion-buttons, .special-functions-buttons').forEach(div => {
+                div.style.display = 'none';
+            });
+            // Показываем кнопки для выбранного режима
+            document.querySelector(`.${mode}-buttons`).style.display = 'grid';
+            // Сброс состояния калькулятора при смене режима
+            clearDisplay(); 
+        }
+
+        // Обработка нажатий клавиш
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            const displayValue = display.textContent;
+
+            if (!isNaN(parseInt(key)) || key === '.') { // Цифры и десятичная точка
+                appendToDisplay(key);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') { // Операторы
+                if (currentMode !== 'programmer') { // В программистском режиме эти операторы имеют другое значение
+                     if (key === '*') performOperation('*');
+                     if (key === '/') performOperation('/');
+                     if (key === '+') performOperation('+');
+                     if (key === '-') performOperation('-');
+                } else {
+                    // В программистском режиме '+' и '-' обрабатываются как преобразование, а не операция
+                    if (key === '&') performOperation('&');
+                    if (key === '|') performOperation('|');
+                }
+            } else if (key === 'Enter' || key === '=') { // Enter или =
+                calculateResult();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') { // Escape или C
+                clearDisplay();
+            } else if (key === 'Backspace') { // Backspace
+                clearEntry();
+            } else if (key === '^') { // Для возведения в степень
+                performOperation('^');
+            } else if (key === '(' || key === ')') { // Скобки
+                appendToDisplay(key);
+            } else if (key === 'a' || key === 'A') { // Специальные клавиши
+                if (currentMode === 'programmer') appendToDisplay('A');
+            } else if (key === 'e' || key === 'E') {
+                 if (currentMode === 'programmer') appendToDisplay('E');
+                 else if (currentMode === 'engineering') appendToDisplay('e');
+            }
+             // Добавьте здесь обработку других клавиш для инженерного, программистского и т.д. режимов
+        });
+
+
+        // --- Функции для Программистского режима ---
+        function changeBase(newBase) {
+            const bases = { bin: 2, oct: 8, dec: 10, hex: 16 };
+            base = bases[newBase];
+            let currentValue = convertFromBase(display.textContent, base); // Преобразуем текущее значение в десятичное
+            firstOperand = currentValue; // Устанавливаем преобразованное значение как первый операнд
+            currentInput = ''; // Очищаем текущий ввод
+            updateDisplay();
+        }
+
+        // Конвертация из одной системы счисления в другую (string)
+        function convertToBase(value, targetBase) {
+            const decimalValue = convertFromBase(value, base);
+            if (isNaN(decimalValue)) return 'Error';
+
+            if (targetBase === 2) return decimalValue.toString(2);
+            if (targetBase === 8) return decimalValue.toString(8);
+            if (targetBase === 10) return decimalValue.toString(10);
+            if (targetBase === 16) return decimalValue.toString(16).toUpperCase();
+            return 'Error';
+        }
+
+        // Конвертация из любой системы счисления в десятичную (string)
+        function convertFromBase(value, sourceBase) {
+            return parseInt(value, sourceBase);
+        }
+
+        // --- Функции для Статистического режима ---
+        function addValueForStats() {
+            const value = parseFloat(currentInput);
+            if (!isNaN(value)) {
+                statsArray.push(value);
+                currentInput = ''; // Очищаем дисплей после добавления
+                updateDisplay();
+            }
+        }
+
+        function calculateStats(statType) {
+            if (statsArray.length === 0) return;
+            let result;
+            switch (statType) {
+                case 'mean': // Сумма
+                    result = statsArray.reduce((sum, val) => sum + val, 0);
+                    break;
+                case 'average': // Среднее
+                    result = statsArray.reduce((sum, val) => sum + val, 0) / statsArray.length;
+                    break;
+                case 'variance': // Дисперсия
+                    const meanForVar = statsArray.reduce((sum, val) => sum + val, 0) / statsArray.length;
+                    result = statsArray.reduce((sum, val) => sum + Math.pow(val - meanForVar, 2), 0) / statsArray.length;
+                    break;
+                case 'stdev': // Стандартное отклонение
+                    const meanForStdDev = statsArray.reduce((sum, val) => sum + val, 0) / statsArray.length;
+                    const variance = statsArray.reduce((sum, val) => sum + Math.pow(val - meanForStdDev, 2), 0) / statsArray.length;
+                    result = Math.sqrt(variance);
+                    break;
+                default: return;
+            }
+            currentInput = result.toString();
+            firstOperand = ''; // Сбрасываем первый операнд
+            operator = ''; // Сбрасываем оператор
+            updateDisplay();
+        }
+
+        // --- Обработка специальных функций (заполнители) ---
+        function handleSpecialFunction(funcName) {
+             alert('Функция "' + funcName + '" еще не реализована!');
+             // Здесь будет логика для НДС, маржи и т.д.
+        }
+
+        // --- Инициализация ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // При загрузке страницы, показываем кнопки только для стандартного режима
+            switchMode('standard'); 
+            updateDisplay(); // Устанавливаем начальное значение "0"
+        });
+    </script>
+</body>
+</html>
