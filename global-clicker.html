@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Глобальный кликер</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #282c34;
+            color: #61dafb;
+        }
+        h1 {
+            margin-bottom: 0.5em;
+        }
+        #count {
+            font-size: 3em;
+            margin: 0.5em 0 1.5em;
+        }
+        button {
+            padding: 1em 2em;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 10px;
+            background: #61dafb;
+            color: #282c34;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #21a1f1;
+        }
+        button:active {
+            background-color: #0d75d8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 Онлайн Кликер 🔥</h1>
+    <div id="count">0</div>
+    <button id="clickBtn">Кликни меня!</button>
+
+    <script>
+        const countElem = document.getElementById('count');
+        const clickBtn = document.getElementById('clickBtn');
+
+        // Загрузка сохранённого счёта из localStorage или 0 по умолчанию
+        let count = Number(localStorage.getItem('globalClickCount')) || 0;
+        countElem.textContent = count;
+
+        clickBtn.addEventListener('
