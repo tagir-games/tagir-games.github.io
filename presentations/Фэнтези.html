@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Презентация без смены слайдов</title>
+<style>
+  /* Опционально: можно задать стили для iframe */
+  .presentation-container {
+    position: relative;
+    width: 960px; /* Ширина вашего iframe */
+    height: 569px; /* Высота вашего iframe */
+    overflow: hidden; /* Скрыть содержимое, выходящее за пределы */
+  }
+  .presentation-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="presentation-container">
+  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQCvGmkFq7qzbMBdUMTYGsfZNouEEGZnMh22aFXyqJHhZLlNX_eGlzuJSljRiDo_S3cgcsxcJq9qc0m/pubembed?start=false&loop=false&delayms=3000"
+          frameborder="0"
+          allowfullscreen="true"
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"></iframe>
+</div>
+
+<script>
+  // Находим iframe на странице
+  const iframeElement = document.querySelector('.presentation-container iframe');
+
+  if (iframeElement) {
+    // Получаем содержимое iframe (требует, чтобы iframe был на том же домене)
+    // В данном случае, так как это публикация Google Docs, прямой доступ к содержимому
+    // через JS с другого сайта ограничен из-за Same-Origin Policy.
+    // Поэтому мы перехватим событие клика на сам iframe.
+
+    iframeElement.addEventListener('click', (event) => {
+      // Предотвращаем стандартное действие клика, которое может вызвать смену слайда.
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("Клик на iframe перехвачен, смена слайда отменена.");
+    });
+
+    // Важно: Параметры '&start=false' и '&loop=false' в URL уже должны
+    // отключить автоматический старт и зацикливание.
+    // '&delayms=3000' задает задержку, но она не будет активна, если презентация не проигрывается автоматически.
+
+    console.log("Обработчик клика добавлен для предотвращения смены слайда.");
+  } else {
+    console.error("IFrame с презентацией не найден.");
+  }
+</script>
+
+</body>
+</html>
