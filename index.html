@@ -9,7 +9,6 @@
   <link rel="icon" href="t-games.svg" />
   <link rel="shortcut icon" href="t-games.svg" type="image/svg" />
   <style>
-    /* Технологичный темный стиль с неоном */
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
     
     body {
@@ -24,6 +23,7 @@
       flex-direction: column;
       align-items: center;
       user-select: none;
+      position: relative;
     }
     h1 {
       font-size: 20px;
@@ -36,7 +36,6 @@
       font-weight: 500;
     }
     
-    /* Контейнер с карточками */
     .container {
       display: flex;
       flex-wrap: wrap;
@@ -47,7 +46,6 @@
       margin-top: 20px;
     }
     
-    /* Карточки */
     .item {
       background-color: #121225;
       border: 2px solid #00ffe7;
@@ -84,7 +82,7 @@
       color: #80fff8;
       font-size: 13px;
       margin-top: 0;
-      min-height: 38px; /* для выравнивания по высоте карточек */
+      min-height: 38px;
     }
 
     a {
@@ -98,7 +96,6 @@
       outline: none;
     }
     
-    /* Поисковое поле */
     #search-container {
       width: 100%;
       max-width: 500px;
@@ -130,29 +127,61 @@
         0 0 12px #00fff7,
         inset 0 0 20px #00fff7;
     }
+
+    /* Кнопка динамика для управления музыкой */
+    #btn-music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: filter 0.3s ease;
+      filter: drop-shadow(0 0 2px #00ffe7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      z-index: 1000;
+    }
+    #btn-music-toggle svg {
+      width: 28px;
+      height: 28px;
+      transition: fill 0.3s ease;
+    }
+    #btn-music-toggle:focus {
+      outline: 2px solid #00ffe7;
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
+
   <h1>Выбирай игру, и играй!</h1>
+
   <div id="search-container">
-    <input type="search" id="search" placeholder="Поиск по проектам, авторам и описаням..." autocomplete="off" />
+    <input type="search" id="search" placeholder="Поиск по проектам, авторам и описаниям..." autocomplete="off" />
   </div>
+
   <div class="container" id="projects-container">
-    <div class="item" data-title="Нарисуй платформер" data-desc="Нарисуй свой собственный платформер!">
+    <div class="item" data-title="Нарисуй платформер" data-desc="Нарисуй свой собственный платформер! Создатель: Tagir14012014">
       <h1>Нарисуй платформер</h1>
       <a href="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80" tabindex="0">
         <img src="Нарисуй платформер.svg" alt="Нарисуй платформер" />
       </a>
       <p>Нарисуй свой собственный платформер! Создатель: Tagir14012014</p>
     </div>
-    <div class="item" data-title="Avatar Editor" data-desc="Создай себе аватар!">
+    <div class="item" data-title="Avatar Editor" data-desc="Создай себе аватар! Создатель: Tagir14012014">
       <h1>Avatar Editor</h1>
       <a href="https://tagir-games.github.io/avatar-editor" tabindex="0">
         <img src="avatar editor.png" alt="Avatar Editor" />
       </a>
       <p>Создай себе аватар! Создатель: Tagir14012014</p>
     </div>
-    <div class="item" data-title="Бег с препятствиями" data-desc="Беги и прыгай!">
+    <div class="item" data-title="Бег с препятствиями" data-desc="Беги и прыгай! Создатель: Tagir14012014">
       <h1>Бег с препятствиями</h1>
       <a href="https://tagir-games.github.io/бег-с-препятствиями" tabindex="0">
         <img src="Бег с препятствиями.svg" alt="Бег с препятствиями" />
@@ -201,14 +230,40 @@
       </a>
       <p>Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014</p>
     </div>
+    <div class="item" data-title="Скоро будет!" data-desc="В процессе разработки">
+      <h1>Скоро будет!</h1>
+      <a href="https://tagir-games.github.io" tabindex="0">
+        <img src="совсем скоро.svg" alt="Скоро будет" />
+      </a>
+      <p>В процессе разработки</p>
+    </div>
   </div>
+
+  <!-- Кнопка управления музыкой -->
+  <button id="btn-music-toggle" aria-label="Включить/выключить музыку меню" aria-pressed="true">
+    <!-- Иконка динамика со звуковыми волнами -->
+    <svg id="icon-speaker-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="28" height="28" fill="#00ffe7" >
+      <path d="M3 9v6h4l5 5V4L7 9H3z"></path>
+      <path d="M16.5 12a4.5 4.5 0 0 1-1.5 3.32v-6.64A4.5 4.5 0 0 1 16.5 12z" />
+      <path d="M19.5 12a7.5 7.5 0 0 1-2.25 5.3v-10.6A7.5 7.5 0 0 1 19.5 12z" />
+    </svg>
+    <!-- Иконка динамика без звука (скрыта по умолчанию) -->
+    <svg id="icon-speaker-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="28" height="28" fill="#004d4b" style="display:none;">
+      <path d="M3 9v6h4l5 5V4L7 9H3z" opacity="0.5"></path>
+      <line x1="17" y1="7" x2="22" y2="12" stroke="#004d4b" stroke-width="2" />
+      <line x1="22" y1="7" x2="17" y2="12" stroke="#004d4b" stroke-width="2" />
+    </svg>
+  </button>
+
+  <!-- Музыка меню -->
+  <audio id="menu-music" src="https://tagir-games.github.io/menu.mp3" loop preload="auto"></audio>
 
   <script>
     (() => {
       const container = document.getElementById('projects-container');
       const items = Array.from(container.children);
 
-      // 1. Перемешиваем карточки случайным образом
+      // Перемешиваем карточки случайным образом
       function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -216,16 +271,14 @@
         }
         return array;
       }
-
       function renderShuffled() {
         const shuffledItems = shuffleArray(items);
         container.innerHTML = '';
         shuffledItems.forEach(item => container.appendChild(item));
       }
-
       renderShuffled();
 
-      // 2. Фильтр поиска
+      // Фильтр поиска
       const searchInput = document.getElementById('search');
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.trim().toLowerCase();
@@ -236,7 +289,60 @@
           item.style.display = matches ? 'block' : 'none';
         });
       });
+
+      // Музыка и кнопка управления
+      const music = document.getElementById('menu-music');
+      const btnToggle = document.getElementById('btn-music-toggle');
+      const iconOn = document.getElementById('icon-speaker-on');
+      const iconOff = document.getElementById('icon-speaker-off');
+
+      function updateIcon(isPlaying) {
+        if (isPlaying) {
+          iconOn.style.display = 'block';
+          iconOff.style.display = 'none';
+          btnToggle.setAttribute('aria-pressed', 'true');
+        } else {
+          iconOn.style.display = 'none';
+          iconOff.style.display = 'block';
+          btnToggle.setAttribute('aria-pressed', 'false');
+        }
+      }
+
+      music.loop = true;
+      music.preload = "auto";
+
+      // Попытка автозапуска музыки (часто блокируется браузерами)
+      music.play().then(() => {
+        updateIcon(true);
+        localStorage.setItem('menuMusicMuted', 'false');
+      }).catch(() => {
+        updateIcon(false);
+        localStorage.setItem('menuMusicMuted', 'true');
+      });
+
+      // Проверка сохранённого состояния
+      const savedMuted = localStorage.getItem('menuMusicMuted');
+      if (savedMuted === 'true') {
+        music.pause();
+        updateIcon(false);
+      } else if (savedMuted === 'false') {
+        music.play().catch(() => updateIcon(false));
+        updateIcon(true);
+      }
+
+      btnToggle.addEventListener('click', () => {
+        if (music.paused) {
+          music.play();
+          updateIcon(true);
+          localStorage.setItem('menuMusicMuted', 'false');
+        } else {
+          music.pause();
+          updateIcon(false);
+          localStorage.setItem('menuMusicMuted', 'true');
+        }
+      });
     })();
   </script>
+
 </body>
 </html>
