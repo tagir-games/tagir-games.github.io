@@ -239,7 +239,7 @@
   <h1>Выбирай игру, и играй!</h1>
 
   <div id="search-container">
-    <input type="search" id="search" placeholder="Поиск по проектам, описаниям и авторам..." autocomplete="off" />
+    <input type="search" id="search" placeholder="Поиск по проектам..." autocomplete="off" />
   </div>
 
   <div class="container" id="projects-container">
@@ -317,7 +317,13 @@
 
   <!-- Модальное окно с iframe и кнопками -->
   <div id="game-modal" role="dialog" aria-modal="true" aria-label="Окно игры">
-    <iframe id="game-iframe" src="" frameborder="0" allowfullscreen sandbox></iframe>
+    <iframe 
+      id="game-iframe" 
+      src="" 
+      frameborder="0" 
+      allowfullscreen 
+      sandbox="allow-scripts allow-same-origin"
+    ></iframe>
     <div id="modal-controls">
       <button id="open-new-window" class="modal-btn" title="Открыть игру в новом окне" aria-label="Открыть игру в новом окне">Открыть в другом окне</button>
       <button id="close-modal-btn" class="modal-btn" aria-label="Закрыть игру">&times;</button>
@@ -473,30 +479,25 @@
       function createSlug(text) {
         return text
           .toString()
-          .normalize('NFD')                   // раскладываем символы с диакритикой
-          .replace(/[\u0300-\u036f]/g, '')   // удаляем диакритические знаки
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
           .toLowerCase()
-          .replace(/\s+/g, '-')              // пробелы на дефис
-          .replace(/[^\w\-]+/g, '')          // все кроме букв, цифр, _
-          .replace(/\-\-+/g, '-')            // несколько дефисов подряд
-          .replace(/^-+/, '')                // убрать дефисы в начале
-          .replace(/-+$/, '')                // убрать дефисы в конце
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '')
           ;
       }
 
       // Клик по карточке (кроме клика на ссылку внутри)
       container.addEventListener('click', e => {
-        // Ищем ближайшую карточку .item от клика
         const item = e.target.closest('.item');
         if(!item) return;
-
-        // Если клик был по ссылке, пропускаем — браузер откроет вкладку
         if(e.target.tagName.toLowerCase() === 'a') return;
-
         e.preventDefault();
         const url = item.getAttribute('data-url');
         if(!url) return;
-
         const slug = createSlug(item.getAttribute('data-title'));
         openGame(url, slug);
       });
