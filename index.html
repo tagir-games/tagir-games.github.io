@@ -59,6 +59,8 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       user-select: none;
+      position: relative;
+      overflow: hidden;
     }
     .item:hover {
       transform: scale(1.05);
@@ -128,6 +130,7 @@
         inset 0 0 20px #00fff7;
     }
 
+
     /* Кнопка динамика для управления музыкой */
     #btn-music-toggle {
       position: fixed;
@@ -156,6 +159,61 @@
       outline: 2px solid #00ffe7;
       outline-offset: 2px;
     }
+
+    /* Модальное окно для iframe */
+    #game-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 15, 20, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      flex-direction: column;
+      padding: 10px;
+    }
+    #game-modal.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    #game-iframe {
+      width: 90vw;
+      height: 80vh;
+      border: none;
+      border-radius: 12px;
+      box-shadow:
+        0 0 20px #00eee7,
+        inset 0 0 30px #00ffe7;
+      background-color: black;
+      max-width: 1200px;
+    }
+    #close-modal-btn {
+      margin-top: 12px;
+      background-color: transparent;
+      border: 2px solid #00ffe7;
+      border-radius: 50%;
+      color: #00ffe7;
+      font-size: 30px;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 40px;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00ffe7;
+    }
+    #close-modal-btn:hover {
+      background-color: #00ffe7;
+      color: #001F1F;
+      box-shadow: 0 0 20px #00ffe7;
+    }
   </style>
 </head>
 <body>
@@ -163,80 +221,86 @@
   <h1>Выбирай игру, и играй!</h1>
 
   <div id="search-container">
-    <input type="search" id="search" placeholder="Поиск по проектам, авторам и описаниям..." autocomplete="off" />
+    <input type="search" id="search" placeholder="Поиск по проектам, описаниям и авторам..." autocomplete="off" />
   </div>
 
   <div class="container" id="projects-container">
-    <div class="item" data-title="Нарисуй платформер" data-desc="Нарисуй свой собственный платформер! Создатель: Tagir14012014">
+    <div class="item" data-title="Нарисуй платформер" data-desc="Нарисуй свой собственный платформер! Автор: Tagir14012014" data-url="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80">
       <h1>Нарисуй платформер</h1>
-      <a href="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80" tabindex="0">
+      <a href="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="Нарисуй платформер.svg" alt="Нарисуй платформер" />
       </a>
-      <p>Нарисуй свой собственный платформер! Создатель: Tagir14012014</p>
+      <p>Нарисуй свой собственный платформер! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
     </div>
-    <div class="item" data-title="Avatar Editor" data-desc="Создай себе аватар! Создатель: Tagir14012014">
+    <div class="item" data-title="Avatar Editor" data-desc="Создай себе аватар! Автор: Tagir14012014" data-url="https://tagir-games.github.io/avatar-editor">
       <h1>Avatar Editor</h1>
-      <a href="https://tagir-games.github.io/avatar-editor" tabindex="0">
+      <a href="https://tagir-games.github.io/avatar-editor" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="avatar editor.png" alt="Avatar Editor" />
       </a>
-      <p>Создай себе аватар! Создатель: Tagir14012014</p>
+      <p>Создай себе аватар! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
     </div>
-    <div class="item" data-title="Бег с препятствиями" data-desc="Беги и прыгай! Создатель: Tagir14012014">
+    <div class="item" data-title="Бег с препятствиями" data-desc="Беги и прыгай! Автор: Tagir14012014" data-url="https://tagir-games.github.io/бег-с-препятствиями">
       <h1>Бег с препятствиями</h1>
-      <a href="https://tagir-games.github.io/бег-с-препятствиями" tabindex="0">
+      <a href="https://tagir-games.github.io/бег-с-препятствиями" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="Бег с препятствиями.svg" alt="Бег с препятствиями" />
       </a>
-      <p>Беги и прыгай! Создатель: Tagir14012014</p>
+      <p>Беги и прыгай! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
     </div>
-    <div class="item" data-title="Blubibar" data-desc="Развивайся в Blubibar! Создатель: awfawes">
+    <div class="item" data-title="Blubibar" data-desc="Развивайся в Blubibar! Создатель: awfawes" data-url="https://tagir-games.github.io/blubibar">
       <h1>Blubibar</h1>
-      <a href="https://tagir-games.github.io/blubibar" tabindex="0">
+      <a href="https://tagir-games.github.io/blubibar" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="blubibar.svg" alt="Blubibar" />
       </a>
-      <p>Развивайся в Blubibar! Создатель: awfawes</p>
+      <p>Развивайся в Blubibar! Создатель: <a href="https://scratch.mit.edu/users/awfawes/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">awfawes</a></p>
     </div>
-    <div class="item" data-title="Летающая Драздраперма" data-desc="Побей рекорд с Летающей Драздрапермой! Создатель: TTTCreator">
+    <div class="item" data-title="Летающая Драздраперма" data-desc="Побей рекорд с Летающей Драздрапермой! Создатель: TTTCreator" data-url="https://tagir-games.github.io/%D0%BB%D0%B5%D1%82%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D1%80%D0%B0%D0%BF%D0%B5%D1%80%D0%BC%D0%B0">
       <h1>Летающая Драздраперма</h1>
-      <a href="https://tagir-games.github.io/%D0%BB%D0%B5%D1%82%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D1%80%D0%B0%D0%BF%D0%B5%D1%80%D0%BC%D0%B0" tabindex="0">
+      <a href="https://tagir-games.github.io/%D0%BB%D0%B5%D1%82%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D1%80%D0%B0%D0%BF%D0%B5%D1%80%D0%BC%D0%B0" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="дразнепредма.svg" alt="Летающая Драздраперма" />
       </a>
-      <p>Побей рекорд с Летающей Драздрапермой! Создатель: TTTCreator</p>
+      <p>Побей рекорд с Летающей Драздрапермой! Создатель: <a href="https://scratch.mit.edu/users/TTTCreator/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">TTTCreator</a></p>
     </div>
-    <div class="item" data-title="Солнце кликер" data-desc="Копи солнышки с Солнце-Кликером! Создатель: Artyom47k">
+    <div class="item" data-title="Солнце кликер" data-desc="Копи солнышки с Солнце-Кликером! Создатель: Artyom47k" data-url="https://tagir-games.github.io/%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5-%D0%BA%D0%BB%D0%B8%D0%BA%D0%B5%D1%80">
       <h1>Солнце кликер</h1>
-      <a href="https://tagir-games.github.io/%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5-%D0%BA%D0%BB%D0%B8%D0%BA%D0%B5%D1%80" tabindex="0">
+      <a href="https://tagir-games.github.io/%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5-%D0%BA%D0%BB%D0%B8%D0%BA%D0%B5%D1%80" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="солнце кликер.svg" alt="Солнце кликер" />
       </a>
-      <p>Копи солнышки с Солнце-Кликером! Создатель: Artyom47k</p>
+      <p>Копи солнышки с Солнце-Кликером! Создатель: <a href="https://scratch.mit.edu/users/Artyom47k/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Artyom47k</a></p>
     </div>
-    <div class="item" data-title="Битва магов" data-desc="Победи чернокнижника знаниями! Создатель: StupidFridge">
+    <div class="item" data-title="Битва магов" data-desc="Победи чернокнижника знаниями! Создатель: StupidFridge" data-url="https://tagir-games.github.io/битва-магов">
       <h1>Битва магов</h1>
-      <a href="https://tagir-games.github.io/битва-магов" tabindex="0">
+      <a href="https://tagir-games.github.io/битва-магов" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="битва магов.svg" alt="Битва магов" />
       </a>
-      <p>Победи чернокнижника знаниями! Создатель: StupidFridge</p>
+      <p>Победи чернокнижника знаниями! Создатель: <a href="https://scratch.mit.edu/users/StupidFridge/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">StupidFridge</a></p>
     </div>
-    <div class="item" data-title="КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!" data-desc="Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: SPIKERMAN2024">
+    <div class="item" data-title="КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!" data-desc="Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: SPIKERMAN2024" data-url="http://tagir-games.github.io/%D0%BF%D1%80%D1%8F%D1%82%D0%BA%D0%B8">
       <h1>КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!</h1>
-      <a href="http://tagir-games.github.io/%D0%BF%D1%80%D1%8F%D1%82%D0%BA%D0%B8" tabindex="0">
+      <a href="http://tagir-games.github.io/%D0%BF%D1%80%D1%8F%D1%82%D0%BA%D0%B8" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="прятки.svg" alt="Прятки" />
       </a>
-      <p>Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: SPIKERMAN2024</p>
+      <p>Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: <a href="https://scratch.mit.edu/users/SPIKERMAN2024/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">SPIKERMAN2024</a></p>
     </div>
-    <div class="item" data-title="Мафия" data-desc='Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014'>
+    <div class="item" data-title="Мафия" data-desc='Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014' data-url="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F">
       <h1>Мафия</h1>
-      <a href="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F" tabindex="0">
+      <a href="https://tagir-games.github.io/%D0%9М%D0%B0%D1%84%D0%B8%D1%8F" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="анимированная мафия.gif" alt="Мафия" />
       </a>
-      <p>Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014</p>
+      <p>Электронная версия популярной настольной игры "Мафия"! Создатель: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
     </div>
-    <div class="item" data-title="Скоро будет!" data-desc="В процессе разработки">
+    <div class="item" data-title="Скоро будет!" data-desc="В процессе разработки" data-url="https://tagir-games.github.io">
       <h1>Скоро будет!</h1>
-      <a href="https://tagir-games.github.io" tabindex="0">
+      <a href="https://tagir-games.github.io" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="совсем скоро.svg" alt="Скоро будет" />
       </a>
       <p>В процессе разработки</p>
     </div>
+  </div>
+
+  <!-- Модальное окно с iframe -->
+  <div id="game-modal" role="dialog" aria-modal="true" aria-label="Окно игры">
+    <iframe id="game-iframe" src="" frameborder="0" allowfullscreen sandbox></iframe>
+    <button id="close-modal-btn" aria-label="Закрыть игру">&times;</button>
   </div>
 
   <!-- Кнопка управления музыкой -->
@@ -341,6 +405,105 @@
           localStorage.setItem('menuMusicMuted', 'true');
         }
       });
+
+      // Модальное окно и iframe
+      const modal = document.getElementById('game-modal');
+      const iframe = document.getElementById('game-iframe');
+      const btnClose = document.getElementById('close-modal-btn');
+
+      // Открыть игру по URL
+      function openGame(url, anchor) {
+        iframe.src = url;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        if(anchor) {
+          history.pushState(null, '', '#' + anchor);
+        }
+      }
+
+      // Закрыть игру
+      function closeGame() {
+        modal.classList.remove('show');
+        iframe.src = '';
+        document.body.style.overflow = '';
+        if(location.hash) {
+          history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+      }
+
+      // Ищем item по якорю
+      function openGameByHash() {
+        const hash = location.hash.slice(1);
+        if(!hash) return;
+        const found = items.find(item => {
+          return createSlug(item.getAttribute('data-title')) === hash;
+        });
+        if(found) {
+          openGame(found.getAttribute('data-url'), hash);
+        }
+      }
+
+      // Помогает получить URL-дружелюбный slug
+      function createSlug(text) {
+        return text
+          .toString()
+          .normalize('NFD')                   // раскладываем символы с диакритикой
+          .replace(/[\u0300-\u036f]/g, '')   // удаляем диакритические знаки
+          .toLowerCase()
+          .replace(/\s+/g, '-')              // пробелы на дефис
+          .replace(/[^\w\-]+/g, '')          // все кроме букв, цифр, _
+          .replace(/\-\-+/g, '-')            // несколько дефисов подряд
+          .replace(/^-+/, '')                // убрать дефисы в начале
+          .replace(/-+$/, '')                // убрать дефисы в конце
+          ;
+      }
+
+      // Клик по карточке (кроме клика на ссылку внутри)
+      container.addEventListener('click', e => {
+        // Ищем ближайшую карточку .item от клика
+        const item = e.target.closest('.item');
+        if(!item) return;
+
+        // Если клик был по ссылке, пропускаем — браузер откроет вкладку
+        if(e.target.tagName.toLowerCase() === 'a') return;
+
+        e.preventDefault();
+        const url = item.getAttribute('data-url');
+        if(!url) return;
+
+        const slug = createSlug(item.getAttribute('data-title'));
+        openGame(url, slug);
+      });
+
+      // Кнопка закрытия
+      btnClose.addEventListener('click', closeGame);
+
+      // Закрытие по Esc
+      window.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && modal.classList.contains('show')) {
+          closeGame();
+        }
+      });
+
+      // Закрытие при клике вне iframe
+      modal.addEventListener('click', e => {
+        if(e.target === modal) {
+          closeGame();
+        }
+      });
+
+      // При загрузке страницы — если есть хеш в URL, открываем игру
+      window.addEventListener('load', openGameByHash);
+
+      // Обработка навигации назад/вперёд в истории
+      window.addEventListener('popstate', () => {
+        if(location.hash) {
+          openGameByHash();
+        } else {
+          closeGame();
+        }
+      });
+
     })();
   </script>
 
