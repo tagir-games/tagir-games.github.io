@@ -167,7 +167,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0, 15, 20, 0.85);
+      background-color: rgba(0, 15, 20, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -193,26 +193,44 @@
       background-color: black;
       max-width: 1200px;
     }
-    #close-modal-btn {
+    #modal-controls {
       margin-top: 12px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      width: 90vw;
+    }
+    button.modal-btn {
       background-color: transparent;
       border: 2px solid #00ffe7;
-      border-radius: 50%;
+      border-radius: 12px;
       color: #00ffe7;
-      font-size: 30px;
-      width: 48px;
-      height: 48px;
+      padding: 10px 20px;
       cursor: pointer;
       user-select: none;
+      font-family: 'Orbitron', monospace, Arial, sans-serif;
+      font-weight: 600;
+      font-size: 16px;
       transition: background-color 0.3s ease, color 0.3s ease;
-      line-height: 40px;
-      font-weight: bold;
       box-shadow: 0 0 10px #00ffe7;
+      min-width: 150px;
     }
-    #close-modal-btn:hover {
+    button.modal-btn:hover {
       background-color: #00ffe7;
       color: #001F1F;
       box-shadow: 0 0 20px #00ffe7;
+    }
+    button#close-modal-btn {
+      font-size: 36px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      padding: 0;
+      line-height: 40px;
+      font-weight: normal;
+      min-width: 48px;
     }
   </style>
 </head>
@@ -283,7 +301,7 @@
     </div>
     <div class="item" data-title="Мафия" data-desc='Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014' data-url="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F">
       <h1>Мафия</h1>
-      <a href="https://tagir-games.github.io/%D0%9М%D0%B0%D1%84%D0%B8%D1%8F" tabindex="0" target="_blank" rel="noopener noreferrer">
+      <a href="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="анимированная мафия.gif" alt="Мафия" />
       </a>
       <p>Электронная версия популярной настольной игры "Мафия"! Создатель: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
@@ -297,10 +315,13 @@
     </div>
   </div>
 
-  <!-- Модальное окно с iframe -->
+  <!-- Модальное окно с iframe и кнопками -->
   <div id="game-modal" role="dialog" aria-modal="true" aria-label="Окно игры">
     <iframe id="game-iframe" src="" frameborder="0" allowfullscreen sandbox></iframe>
-    <button id="close-modal-btn" aria-label="Закрыть игру">&times;</button>
+    <div id="modal-controls">
+      <button id="open-new-window" class="modal-btn" title="Открыть игру в новом окне" aria-label="Открыть игру в новом окне">Открыть в другом окне</button>
+      <button id="close-modal-btn" class="modal-btn" aria-label="Закрыть игру">&times;</button>
+    </div>
   </div>
 
   <!-- Кнопка управления музыкой -->
@@ -410,9 +431,13 @@
       const modal = document.getElementById('game-modal');
       const iframe = document.getElementById('game-iframe');
       const btnClose = document.getElementById('close-modal-btn');
+      const btnOpenNew = document.getElementById('open-new-window');
+
+      let currentUrl = null;
 
       // Открыть игру по URL
       function openGame(url, anchor) {
+        currentUrl = url;
         iframe.src = url;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
@@ -426,6 +451,7 @@
         modal.classList.remove('show');
         iframe.src = '';
         document.body.style.overflow = '';
+        currentUrl = null;
         if(location.hash) {
           history.pushState("", document.title, window.location.pathname + window.location.search);
         }
@@ -477,6 +503,13 @@
 
       // Кнопка закрытия
       btnClose.addEventListener('click', closeGame);
+
+      // Кнопка открыть в новом окне
+      btnOpenNew.addEventListener('click', () => {
+        if(currentUrl) {
+          window.open(currentUrl, '_blank', 'noopener');
+        }
+      });
 
       // Закрытие по Esc
       window.addEventListener('keydown', e => {
