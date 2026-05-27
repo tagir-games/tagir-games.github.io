@@ -9,174 +9,178 @@
   <link rel="icon" href="t-games.svg" />
   <link rel="shortcut icon" href="t-games.svg" type="image/svg" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
     body {
-      background: linear-gradient(135deg, #0f0f15 0%, #1a1a2e 100%);
-      color: #00ffe7;
-      font-family: 'Orbitron', monospace, Arial, sans-serif;
-      font-size: 14px;
       margin: 0;
-      padding: 20px;
-      min-height: 100vh;
+      padding: 20px 24px 100px 24px; /* снизу место под подвал */
+      background: linear-gradient(135deg, #001f33 0%, #003d66 100%);
+      color: #e0f7ff;
+      font-family: 'Roboto Mono', monospace, monospace, monospace;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
       user-select: none;
-      position: relative;
     }
     h1 {
-      font-size: 20px;
-      color: #00ffe7;
+      font-weight: 700;
+      font-size: 28px;
+      color: #8fe8ff;
+      margin-bottom: 28px;
       text-shadow:
-        0 0 5px #00ffe7,
-        0 0 10px #00ffe7,
-        0 0 20px #00ffe7;
-      margin-bottom: 10px;
-      font-weight: 500;
+        0 0 6px #74d0ff,
+        0 0 12px #3ab4ffcc;
     }
-    
+    #search-container {
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 36px;
+      position: relative;
+      box-shadow:
+        0 0 12px #3ab4ff99;
+      border-radius: 28px;
+      background-color: #003d66;
+    }
+    #search {
+      width: 100%;
+      padding: 14px 48px 14px 20px;
+      border: none;
+      border-radius: 28px;
+      font-size: 16px;
+      background: transparent;
+      color: #c0eaff;
+      outline: none;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: box-shadow 0.3s ease;
+      text-shadow: 0 0 2px #74d0ff;
+    }
+    #search::placeholder {
+      color: #74d0ff99;
+      font-style: italic;
+    }
+    #search:focus {
+      box-shadow: 0 0 12px #3ab4ffcc;
+      background-color: #005299;
+      color: #d6f0ff;
+      text-shadow: 0 0 6px #a4d8ff;
+    }
+    #search-container::after {
+      content: "🔍";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: #66b2ffbb;
+      user-select: none;
+      pointer-events: none;
+    }
     .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 1200px;
+      gap: 26px 22px;
+      max-width: 1240px;
       width: 100%;
-      gap: 20px;
-      margin-top: 20px;
     }
-    
     .item {
-      background-color: #121225;
-      border: 2px solid #00ffe7;
+      background: #003d66cc;
+      border-radius: 15px;
       box-shadow:
-        0 0 10px #00ffe7,
-        inset 0 0 15px #00ffe7;
-      border-radius: 12px;
-      padding: 15px;
-      width: 250px;
+        0 0 14px #3ab4ff88,
+        inset 0 0 8px #66b8ffff;
+      width: 260px;
+      padding: 18px 16px 24px 16px;
       text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       user-select: none;
-      position: relative;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition:
+        transform 0.3s cubic-bezier(0.3,1,0.4,1),
+        box-shadow 0.3s ease;
     }
+    .item:focus-visible,
     .item:hover {
-      transform: scale(1.05);
+      transform: translateY(-5px) scale(1.03);
       box-shadow:
-        0 0 20px #00fff7,
-        inset 0 0 25px #00fff7;
+        0 0 28px #72bcffcc,
+        inset 0 0 16px #a6d6ffdd;
+      outline: none;
     }
     .item img {
       width: 200px;
       height: 200px;
       object-fit: contain;
-      border-radius: 8px;
-      border: 1px solid #00ffee;
-      box-shadow: 0 0 8px #00ffee;
-      margin-bottom: 10px;
-      background-color: #000a0d;
+      border-radius: 14px;
+      border: 1.5px solid #74c8ff88;
+      box-shadow: 0 0 12px #53acff88;
+      margin-bottom: 14px;
+      background-color: #00284d;
       user-select: none;
       pointer-events: none;
+      transition: filter 0.35s ease;
+    }
+    .item:hover img,
+    .item:focus-visible img {
+      filter: drop-shadow(0 0 6px #7ad6ffcc);
+    }
+    .item h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #bfe9ff;
+      margin: 0 0 8px 0;
+      user-select: text;
+      text-shadow:
+        0 0 3px #52aaffaa;
     }
     .item p {
-      color: #80fff8;
-      font-size: 13px;
-      margin-top: 0;
-      min-height: 38px;
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.3;
+      color: #b0dfffdd;
+      user-select: text;
     }
-
-    a {
-      color: #00ffe7;
+    .item p a {
+      color: #83c7ff;
+      font-weight: 600;
       text-decoration: none;
-      outline: none;
+      transition: color 0.3s ease;
     }
-    a:focus, a:hover {
+    .item p a:hover,
+    .item p a:focus {
+      color: #a5defd;
       text-decoration: underline;
-      color: #00fff7;
       outline: none;
     }
-    
-    #search-container {
-      width: 100%;
-      max-width: 500px;
-      margin-bottom: 5px;
-      position: relative;
-      box-shadow:
-        0 0 8px #00ffe7;
-      border-radius: 50px;
+    .item[style*="display: none"] {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.95);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    #search {
-      width: 100%;
-      padding: 12px 20px;
-      border-radius: 50px;
-      border: none;
-      font-family: 'Orbitron', monospace, Arial, sans-serif;
-      font-size: 16px;
-      background-color: #0a0a14;
-      color: #00ffe7;
-      box-shadow: inset 0 0 15px #00ffe7;
-      outline: none;
-      transition: box-shadow 0.3s ease;
-    }
-    #search::placeholder {
-      color: #006c6a;
-      font-style: italic;
-    }
-    #search:focus {
-      box-shadow:
-        0 0 12px #00fff7,
-        inset 0 0 20px #00fff7;
-    }
-
-
-    /* Кнопка динамика для управления музыкой */
-    #btn-music-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      transition: filter 0.3s ease;
-      filter: drop-shadow(0 0 2px #00ffe7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      z-index: 1000;
-    }
-    #btn-music-toggle svg {
-      width: 28px;
-      height: 28px;
-      transition: fill 0.3s ease;
-    }
-    #btn-music-toggle:focus {
-      outline: 2px solid #00ffe7;
-      outline-offset: 2px;
-    }
-
-    /* Модальное окно для iframe */
     #game-modal {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 15, 20, 0.9);
+      inset: 0;
+      background: rgba(0, 31, 51, 0.92);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       visibility: hidden;
       opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      flex-direction: column;
-      padding: 10px;
+      transition: opacity 0.35s ease;
+      z-index: 15000;
+      padding: 20px 14px;
     }
     #game-modal.show {
       visibility: visible;
@@ -184,53 +188,137 @@
     }
     #game-iframe {
       width: 90vw;
-      height: 80vh;
-      border: none;
-      border-radius: 12px;
+      max-width: 1080px;
+      height: 75vh;
+      border-radius: 16px;
       box-shadow:
-        0 0 20px #00eee7,
-        inset 0 0 30px #00ffe7;
-      background-color: black;
-      max-width: 1200px;
+        0 16px 48px rgb(50 150 255 / 0.4),
+        inset 0 0 24px #3aa4ffcc;
+      border: 2.5px solid #60a8ff;
+      background-color: #002c56;
     }
     #modal-controls {
-      margin-top: 12px;
+      margin-top: 22px;
       display: flex;
-      gap: 15px;
+      gap: 22px;
       justify-content: center;
       flex-wrap: wrap;
-      max-width: 1200px;
+      max-width: 1080px;
       width: 90vw;
     }
     button.modal-btn {
-      background-color: transparent;
-      border: 2px solid #00ffe7;
-      border-radius: 12px;
-      color: #00ffe7;
-      padding: 10px 20px;
+      background: linear-gradient(135deg, #4fb0ff, #1a71f7);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 28px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #e0f7ff;
       cursor: pointer;
       user-select: none;
-      font-family: 'Orbitron', monospace, Arial, sans-serif;
-      font-weight: 600;
-      font-size: 16px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 0 10px #00ffe7;
-      min-width: 150px;
+      box-shadow: 0 0 16px #4fb0ffbb;
+      transition:
+        background 0.4s ease,
+        box-shadow 0.4s ease;
+      min-width: 165px;
+      text-shadow: 0 0 4px #82c3ffcc;
     }
-    button.modal-btn:hover {
-      background-color: #00ffe7;
-      color: #001F1F;
-      box-shadow: 0 0 20px #00ffe7;
+    button.modal-btn:hover,
+    button.modal-btn:focus {
+      background: linear-gradient(135deg, #74c8ff, #287bff);
+      box-shadow: 0 0 26px #74c8ffcc;
+      outline: none;
     }
     button#close-modal-btn {
-      font-size: 36px;
+      font-size: 26px;
       width: 48px;
       height: 48px;
-      border-radius: 50%;
       padding: 0;
-      line-height: 40px;
-      font-weight: normal;
-      min-width: 48px;
+      border-radius: 50%;
+      background: #064889;
+      color: #a8d5ff;
+      box-shadow:
+        0 0 30px #4fb0ff77 inset,
+        0 0 15px #4fb0ffcc;
+      font-weight: 700;
+      line-height: 48px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    button#close-modal-btn:hover,
+    button#close-modal-btn:focus {
+      background: #1377ff;
+      color: #e0f7ff;
+      outline: none;
+    }
+    /* Подвал */
+    footer#page-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #00294d;
+      border-top: 2px solid #1161c5;
+      color: #a0cfffcc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      font-size: 13px;
+      box-shadow: 0 -2px 16px #1161c533;
+      user-select: none;
+      z-index: 16000;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer#page-footer .authors-links {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      user-select: text;
+    }
+    footer#page-footer .authors-links a {
+      color: #5ab3ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer#page-footer .authors-links a:hover,
+    footer#page-footer .authors-links a:focus {
+      color: #9cd2ff;
+      outline: none;
+      text-decoration: underline;
+    }
+
+    /* Кнопка музыки в подвале */
+    #btn-music-toggle {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: #7ac0ff;
+      filter: drop-shadow(0 0 4px #5db0ff99);
+      transition: color 0.3s ease, filter 0.3s ease;
+      user-select: none;
+      padding: 0;
+      border-radius: 12px;
+    }
+    #btn-music-toggle:hover,
+    #btn-music-toggle:focus {
+      color: #a9dbff;
+      filter: drop-shadow(0 0 12px #a6dfffcc);
+      outline: none;
+    }
+    #btn-music-toggle svg {
+      width: 26px;
+      height: 26px;
+      fill: currentColor;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -243,68 +331,69 @@
   </div>
 
   <div class="container" id="projects-container">
+    <!-- Вставляем игры с исправленным URL для пряток -->
     <div class="item" data-title="Нарисуй платформер" data-desc="Нарисуй свой собственный платформер! Автор: Tagir14012014" data-url="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80">
       <h1>Нарисуй платформер</h1>
       <a href="https://tagir-games.github.io/%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D1%83%D0%B9-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D1%80" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="Нарисуй платформер.svg" alt="Нарисуй платформер" />
       </a>
-      <p>Нарисуй свой собственный платформер! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
+      <p>Нарисуй свой собственный платформер! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer">Tagir14012014</a></p>
     </div>
     <div class="item" data-title="Avatar Editor" data-desc="Создай себе аватар! Автор: Tagir14012014" data-url="https://tagir-games.github.io/avatar-editor">
       <h1>Avatar Editor</h1>
       <a href="https://tagir-games.github.io/avatar-editor" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="avatar editor.png" alt="Avatar Editor" />
       </a>
-      <p>Создай себе аватар! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
+      <p>Создай себе аватар! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer">Tagir14012014</a></p>
     </div>
     <div class="item" data-title="Бег с препятствиями" data-desc="Беги и прыгай! Автор: Tagir14012014" data-url="https://tagir-games.github.io/бег-с-препятствиями">
       <h1>Бег с препятствиями</h1>
       <a href="https://tagir-games.github.io/бег-с-препятствиями" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="Бег с препятствиями.svg" alt="Бег с препятствиями" />
       </a>
-      <p>Беги и прыгай! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
+      <p>Беги и прыгай! Автор: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer">Tagir14012014</a></p>
     </div>
     <div class="item" data-title="Blubibar" data-desc="Развивайся в Blubibar! Создатель: awfawes" data-url="https://tagir-games.github.io/blubibar">
       <h1>Blubibar</h1>
       <a href="https://tagir-games.github.io/blubibar" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="blubibar.svg" alt="Blubibar" />
       </a>
-      <p>Развивайся в Blubibar! Создатель: <a href="https://scratch.mit.edu/users/awfawes/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">awfawes</a></p>
+      <p>Развивайся в Blubibar! Создатель: <a href="https://scratch.mit.edu/users/awfawes/" target="_blank" rel="noopener noreferrer">awfawes</a></p>
     </div>
     <div class="item" data-title="Летающая Драздраперма" data-desc="Побей рекорд с Летающей Драздрапермой! Создатель: TTTCreator" data-url="https://tagir-games.github.io/%D0%BB%D0%B5%D1%82%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D1%80%D0%B0%D0%BF%D0%B5%D1%80%D0%BC%D0%B0">
       <h1>Летающая Драздраперма</h1>
       <a href="https://tagir-games.github.io/%D0%BB%D0%B5%D1%82%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D1%80%D0%B0%D0%BF%D0%B5%D1%80%D0%BC%D0%B0" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="дразнепредма.svg" alt="Летающая Драздраперма" />
       </a>
-      <p>Побей рекорд с Летающей Драздрапермой! Создатель: <a href="https://scratch.mit.edu/users/TTTCreator/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">TTTCreator</a></p>
+      <p>Побей рекорд с Летающей Драздрапермой! Создатель: <a href="https://scratch.mit.edu/users/TTTCreator/" target="_blank" rel="noopener noreferrer">TTTCreator</a></p>
     </div>
     <div class="item" data-title="Солнце кликер" data-desc="Копи солнышки с Солнце-Кликером! Создатель: Artyom47k" data-url="https://tagir-games.github.io/%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5-%D0%BA%D0%BB%D0%B8%D0%BA%D0%B5%D1%80">
       <h1>Солнце кликер</h1>
       <a href="https://tagir-games.github.io/%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5-%D0%BA%D0%BB%D0%B8%D0%BA%D0%B5%D1%80" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="солнце кликер.svg" alt="Солнце кликер" />
       </a>
-      <p>Копи солнышки с Солнце-Кликером! Создатель: <a href="https://scratch.mit.edu/users/Artyom47k/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Artyom47k</a></p>
+      <p>Копи солнышки с Солнце-Кликером! Создатель: <a href="https://scratch.mit.edu/users/Artyom47k/" target="_blank" rel="noopener noreferrer">Artyom47k</a></p>
     </div>
     <div class="item" data-title="Битва магов" data-desc="Победи чернокнижника знаниями! Создатель: StupidFridge" data-url="https://tagir-games.github.io/битва-магов">
       <h1>Битва магов</h1>
       <a href="https://tagir-games.github.io/битва-магов" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="битва магов.svg" alt="Битва магов" />
       </a>
-      <p>Победи чернокнижника знаниями! Создатель: <a href="https://scratch.mit.edu/users/StupidFridge/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">StupidFridge</a></p>
+      <p>Победи чернокнижника знаниями! Создатель: <a href="https://scratch.mit.edu/users/StupidFridge/" target="_blank" rel="noopener noreferrer">StupidFridge</a></p>
     </div>
-    <div class="item" data-title="КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!" data-desc="Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: SPIKERMAN2024" data-url="http://tagir-games.github.io/прятки">
+    <div class="item" data-title="КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!" data-desc="Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: SPIKERMAN2024" data-url="https://tagir-games.github.io/%D0%BF%D1%80%D1%8F%D1%82%D0%BA%D0%B8">
       <h1>КТО НЕ СПРЯТАЛСЯ - Я НЕ ВИНОВАТ!</h1>
-      <a href="http://tagir-games.github.io/прятки" tabindex="0" target="_blank" rel="noopener noreferrer">
+      <a href="https://tagir-games.github.io/%D0%BF%D1%80%D1%8F%D1%82%D0%BA%D0%B8" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="прятки.svg" alt="Прятки" />
       </a>
-      <p>Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: <a href="https://scratch.mit.edu/users/SPIKERMAN2024/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">SPIKERMAN2024</a></p>
+      <p>Собери 10 алмазов, НЕПОПАДИСЬ! Создатель: <a href="https://scratch.mit.edu/users/SPIKERMAN2024/" target="_blank" rel="noopener noreferrer">SPIKERMAN2024</a></p>
     </div>
     <div class="item" data-title="Мафия" data-desc='Электронная версия популярной настольной игры "Мафия"! Создатель: Tagir14012014' data-url="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F">
       <h1>Мафия</h1>
       <a href="https://tagir-games.github.io/%D0%9C%D0%B0%D1%84%D0%B8%D1%8F" tabindex="0" target="_blank" rel="noopener noreferrer">
         <img src="анимированная мафия.gif" alt="Мафия" />
       </a>
-      <p>Электронная версия популярной настольной игры "Мафия"! Создатель: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer" style="color:#00ffe7; text-decoration: underline;">Tagir14012014</a></p>
+      <p>Электронная версия популярной настольной игры "Мафия"! Создатель: <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer">Tagir14012014</a></p>
     </div>
     <div class="item" data-title="Скоро будет!" data-desc="В процессе разработки" data-url="https://tagir-games.github.io">
       <h1>Скоро будет!</h1>
@@ -315,7 +404,7 @@
     </div>
   </div>
 
-  <!-- Модальное окно с iframe и кнопками -->
+  <!-- Модальное окно с iframe -->
   <div id="game-modal" role="dialog" aria-modal="true" aria-label="Окно игры">
     <iframe 
       id="game-iframe" 
@@ -323,6 +412,7 @@
       frameborder="0" 
       allowfullscreen 
       sandbox="allow-scripts allow-same-origin"
+      title="Окно игры"
     ></iframe>
     <div id="modal-controls">
       <button id="open-new-window" class="modal-btn" title="Открыть игру в новом окне" aria-label="Открыть игру в новом окне">Открыть в другом окне</button>
@@ -330,23 +420,29 @@
     </div>
   </div>
 
-  <!-- Кнопка управления музыкой -->
-  <button id="btn-music-toggle" aria-label="Включить/выключить музыку меню" aria-pressed="true">
-    <!-- Иконка динамика со звуковыми волнами -->
-    <svg id="icon-speaker-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="28" height="28" fill="#00ffe7" >
-      <path d="M3 9v6h4l5 5V4L7 9H3z"></path>
-      <path d="M16.5 12a4.5 4.5 0 0 1-1.5 3.32v-6.64A4.5 4.5 0 0 1 16.5 12z" />
-      <path d="M19.5 12a7.5 7.5 0 0 1-2.25 5.3v-10.6A7.5 7.5 0 0 1 19.5 12z" />
-    </svg>
-    <!-- Иконка динамика без звука (скрыта по умолчанию) -->
-    <svg id="icon-speaker-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="28" height="28" fill="#004d4b" style="display:none;">
-      <path d="M3 9v6h4l5 5V4L7 9H3z" opacity="0.5"></path>
-      <line x1="17" y1="7" x2="22" y2="12" stroke="#004d4b" stroke-width="2" />
-      <line x1="22" y1="7" x2="17" y2="12" stroke="#004d4b" stroke-width="2" />
-    </svg>
-  </button>
+  <footer id="page-footer">
+    <div class="authors-links" aria-label="Ссылки на авторов">
+      <a href="https://scratch.mit.edu/users/Tagir14012014/" target="_blank" rel="noopener noreferrer">Tagir14012014</a>
+      <a href="https://scratch.mit.edu/users/awfawes/" target="_blank" rel="noopener noreferrer">awfawes</a>
+      <a href="https://scratch.mit.edu/users/TTTCreator/" target="_blank" rel="noopener noreferrer">TTTCreator</a>
+      <a href="https://scratch.mit.edu/users/Artyom47k/" target="_blank" rel="noopener noreferrer">Artyom47k</a>
+      <a href="https://scratch.mit.edu/users/StupidFridge/" target="_blank" rel="noopener noreferrer">StupidFridge</a>
+      <a href="https://scratch.mit.edu/users/SPIKERMAN2024/" target="_blank" rel="noopener noreferrer">SPIKERMAN2024</a>
+    </div>
+    <button id="btn-music-toggle" aria-label="Включить/выключить музыку меню" aria-pressed="true" title="Включить/выключить музыку меню">
+      <svg id="icon-speaker-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3 9v6h4l5 5V4L7 9H3z"></path>
+        <path d="M16.5 12a4.5 4.5 0 0 1-1.5 3.32v-6.64A4.5 4.5 0 0 1 16.5 12z" />
+        <path d="M19.5 12a7.5 7.5 0 0 1-2.25 5.3v-10.6A7.5 7.5 0 0 1 19.5 12z" />
+      </svg>
+      <svg id="icon-speaker-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="display:none">
+        <path d="M3 9v6h4l5 5V4L7 9H3z" opacity="0.5"></path>
+        <line x1="17" y1="7" x2="22" y2="12" stroke="#004d4b" stroke-width="2" />
+        <line x1="22" y1="7" x2="17" y2="12" stroke="#004d4b" stroke-width="2" />
+      </svg>
+    </button>
+  </footer>
 
-  <!-- Музыка меню -->
   <audio id="menu-music" src="https://tagir-games.github.io/menu.mp3" loop preload="auto"></audio>
 
   <script>
@@ -354,7 +450,6 @@
       const container = document.getElementById('projects-container');
       const items = Array.from(container.children);
 
-      // Перемешиваем карточки случайным образом
       function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -362,6 +457,7 @@
         }
         return array;
       }
+
       function renderShuffled() {
         const shuffledItems = shuffleArray(items);
         container.innerHTML = '';
@@ -369,7 +465,6 @@
       }
       renderShuffled();
 
-      // Фильтр поиска
       const searchInput = document.getElementById('search');
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.trim().toLowerCase();
@@ -377,11 +472,10 @@
           const title = item.getAttribute('data-title').toLowerCase();
           const desc = item.getAttribute('data-desc').toLowerCase();
           const matches = title.includes(query) || desc.includes(query);
-          item.style.display = matches ? 'block' : 'none';
+          item.style.display = matches ? 'flex' : 'none';
         });
       });
 
-      // Музыка и кнопка управления
       const music = document.getElementById('menu-music');
       const btnToggle = document.getElementById('btn-music-toggle');
       const iconOn = document.getElementById('icon-speaker-on');
@@ -402,7 +496,6 @@
       music.loop = true;
       music.preload = "auto";
 
-      // Попытка автозапуска музыки (часто блокируется браузерами)
       music.play().then(() => {
         updateIcon(true);
         localStorage.setItem('menuMusicMuted', 'false');
@@ -411,7 +504,6 @@
         localStorage.setItem('menuMusicMuted', 'true');
       });
 
-      // Проверка сохранённого состояния
       const savedMuted = localStorage.getItem('menuMusicMuted');
       if (savedMuted === 'true') {
         music.pause();
@@ -433,49 +525,32 @@
         }
       });
 
-      // Модальное окно и iframe
       const modal = document.getElementById('game-modal');
       const iframe = document.getElementById('game-iframe');
       const btnClose = document.getElementById('close-modal-btn');
       const btnOpenNew = document.getElementById('open-new-window');
-
       let currentUrl = null;
 
-      // Открыть игру по URL
       function openGame(url, anchor) {
         currentUrl = url;
         iframe.src = url;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
-        if(anchor) {
+        if (anchor) {
           history.pushState(null, '', '#' + anchor);
         }
       }
 
-      // Закрыть игру
       function closeGame() {
         modal.classList.remove('show');
         iframe.src = '';
         document.body.style.overflow = '';
         currentUrl = null;
-        if(location.hash) {
+        if (location.hash) {
           history.pushState("", document.title, window.location.pathname + window.location.search);
         }
       }
 
-      // Ищем item по якорю
-      function openGameByHash() {
-        const hash = location.hash.slice(1);
-        if(!hash) return;
-        const found = items.find(item => {
-          return createSlug(item.getAttribute('data-title')) === hash;
-        });
-        if(found) {
-          openGame(found.getAttribute('data-url'), hash);
-        }
-      }
-
-      // Помогает получить URL-дружелюбный slug
       function createSlug(text) {
         return text
           .toString()
@@ -486,58 +561,58 @@
           .replace(/[^\w\-]+/g, '')
           .replace(/\-\-+/g, '-')
           .replace(/^-+/, '')
-          .replace(/-+$/, '')
-          ;
+          .replace(/-+$/, '');
       }
 
-      // Клик по карточке (кроме клика на ссылку внутри)
+      function openGameByHash() {
+        const hash = location.hash.slice(1);
+        if (!hash) return;
+        const found = items.find(item => createSlug(item.getAttribute('data-title')) === hash);
+        if (found) {
+          openGame(found.getAttribute('data-url'), hash);
+        }
+      }
+
       container.addEventListener('click', e => {
         const item = e.target.closest('.item');
-        if(!item) return;
-        if(e.target.tagName.toLowerCase() === 'a') return;
+        if (!item) return;
+        if (e.target.tagName.toLowerCase() === 'a') return;
         e.preventDefault();
         const url = item.getAttribute('data-url');
-        if(!url) return;
+        if (!url) return;
         const slug = createSlug(item.getAttribute('data-title'));
         openGame(url, slug);
       });
 
-      // Кнопка закрытия
       btnClose.addEventListener('click', closeGame);
 
-      // Кнопка открыть в новом окне
       btnOpenNew.addEventListener('click', () => {
-        if(currentUrl) {
+        if (currentUrl) {
           window.open(currentUrl, '_blank', 'noopener');
         }
       });
 
-      // Закрытие по Esc
       window.addEventListener('keydown', e => {
-        if(e.key === 'Escape' && modal.classList.contains('show')) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
           closeGame();
         }
       });
 
-      // Закрытие при клике вне iframe
       modal.addEventListener('click', e => {
-        if(e.target === modal) {
+        if (e.target === modal) {
           closeGame();
         }
       });
 
-      // При загрузке страницы — если есть хеш в URL, открываем игру
       window.addEventListener('load', openGameByHash);
 
-      // Обработка навигации назад/вперёд в истории
       window.addEventListener('popstate', () => {
-        if(location.hash) {
+        if (location.hash) {
           openGameByHash();
         } else {
           closeGame();
         }
       });
-
     })();
   </script>
 
